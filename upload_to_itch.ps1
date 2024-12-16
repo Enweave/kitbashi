@@ -1,6 +1,5 @@
 $BUTLER_PATH = "$ENV:AppData\itch\apps\butler\butler.exe"
-#$VERSION = git log -1 --format="%h"
-$VERSION = "69"
+$VERSION = git log -1 --format="%h"
 
 $ITCH_USER = "enweave"
 $ITCH_GAME = "kitbashi"
