@@ -5,6 +5,7 @@ import MainMenuScreen from "./components/MainMenuScreen.vue";
 import GameScreen from "./components/GameScreen.vue";
 import CreditsScreen from "./components/CreditsScreen.vue";
 import {onMounted, ref} from "vue";
+import {InputController} from "./engine/InputController.ts";
 
 const ASPECT_RATIO = 10 / 9;
 
@@ -12,6 +13,7 @@ const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
 
 const flowController = new FlowController();
+const inputConstroller = new InputController(flowController);
 
 let resizeScreen = function () {
   if (containerRef.value && screenRef.value) {
@@ -31,16 +33,10 @@ let resizeScreen = function () {
 
 onMounted(() => {
   resizeScreen();
-  console.log('App mounted');
+  console.log('App mounted', inputConstroller);
   window.addEventListener('resize', () => {
     resizeScreen();
   });
-
-  window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      flowController.togglePause()
-    }
-  })
 })
 
 </script>
