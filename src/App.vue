@@ -31,21 +31,28 @@ let resizeScreen = function () {
 
 onMounted(() => {
   resizeScreen();
+  console.log('App mounted');
   window.addEventListener('resize', () => {
     resizeScreen();
   });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      flowController.togglePause()
+    }
+  })
 })
 
 </script>
 
 <template>
-<div id="container" class="container" ref="containerRef">
-  <div id="screen" class="screen" ref="screenRef">
-    <main-menu-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.MainMenu"/>
-    <game-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Game"/>
-    <credits-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Credits"/>
+  <div id="container" class="container" ref="containerRef">
+    <div id="screen" class="screen" ref="screenRef">
+      <main-menu-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.MainMenu"/>
+      <game-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Game"/>
+      <credits-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Credits"/>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped>

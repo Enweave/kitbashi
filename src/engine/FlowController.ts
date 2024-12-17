@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 export const enum Screen {
     MainMenu,
@@ -17,11 +17,14 @@ export class FlowController {
     }
 
     startGame() {
+        this.paused.value = false;
         this.currentScreen.value = Screen.Game;
     }
+
     mainMenu() {
         this.currentScreen.value = Screen.MainMenu;
     }
+
     credits() {
         this.currentScreen.value = Screen.Credits;
     }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
 
@@ -11,17 +11,13 @@ const menuClass = computed(() => {
   return props.flowController.paused.value ? 'ingame-menu active' : 'ingame-menu';
 });
 
-onMounted(() => {
-  console.log('Credits mounted')
-
-window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      props.flowController.togglePause()
-      menuRef.value?.querySelector('button')?.focus()
-    }
-  })
-
-})
+watch(props.flowController.paused, (paused) => {
+  if (paused) {
+    window.setTimeout(() => {
+      menuRef.value?.querySelector('button')?.focus();
+    }, 10);
+  }
+});
 
 </script>
 
