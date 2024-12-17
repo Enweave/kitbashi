@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
 import IngameMenu from "./IngameMenu.vue";
+import {MainLoop} from "../engine/MainLoop.ts";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -11,7 +12,8 @@ const props = defineProps<{
 const rootRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-  console.log('GameScreen mounted')
+  const mainLoop = new MainLoop(props.flowController);
+  mainLoop.start();
 })
 </script>
 
