@@ -1,6 +1,42 @@
 @use "variables"
 
 html, body
-  background-color: variables.$color_dark
-  color: variables.$color_accent
+  background-color: variables.$color_a_dark
+  color: variables.$color_a_light
   font-family: variables.$font_family_default
+  // style for selected text
+*::selection
+  background-color: variables.$color_a_light
+  color: variables.$color_a_dark
+
+
+#app
+  height: 100vh
+  height: 100dvh
+  display: flex
+  align-items: center
+  justify-content: center
+
+.container
+  margin: 0 auto
+  max-width: 500px
+  aspect-ratio: 10/9
+  width: 100%
+  outline: 1px solid variables.$color_a_light
+  background-color: variables.$color_b_dark
+
+.menu-container
+  padding: variables.$gutter
+  display: flex
+  flex-direction: column
+  gap: variables.$gutter
+  width: 100%
+  height: 100%
+  justify-content: center
+  align-items: center
+
+.row
+  display: flex
+  flex-wrap: wrap
+  gap: variables.$gutter
+  margin-bottom: variables.$gutter

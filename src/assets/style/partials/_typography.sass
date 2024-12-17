@@ -1,0 +1,35 @@
+@use "variables"
+
+h1
+  font-size: variables.$font_size_h1
+  margin-bottom: 2*variables.$gutter
+
+h2
+  font-size: variables.$font_size_h2
+  margin-bottom: variables.$gutter
+
+p
+  font-size: variables.$font_size_p
+  margin-bottom: variables.$gutter
+
+.row
+  display: flex
+  flex-wrap: wrap
+  gap: variables.$gutter
+  margin-bottom: variables.$gutter
+
+a
+  color: variables.$color_b_light
+  text-decoration: underline
+  &:hover
+    color: variables.$color_a_light
+    text-decoration: none
+  &:active
+    color: variables.$color_b_light
+    text-decoration: none
+  &:visited
+    color: variables.$color_a_light
+    text-decoration: none
+  &:focus, &:focus-visible
+    text-decoration: none
+    @include variables.focus-visible()

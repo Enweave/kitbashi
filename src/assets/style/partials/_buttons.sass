@@ -1,0 +1,34 @@
+@use 'variables'
+
+button
+  text-transform: uppercase
+  background-color: variables.$color_b_light
+  color: variables.$color_a_dark
+  border: none
+  border-radius: variables.$border_radius
+  padding: variables.$gutter/2 variables.$gutter
+  cursor: pointer
+  position: relative
+  min-width: 10em
+  &:after
+    content: ''
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 0
+    height: 2px
+    background-color: variables.$color_a_light
+    transition: width 0.3s
+  &:hover, &:active
+    &:after
+      width: 100%
+  &:active
+    color: variables.$color_b_light
+
+  &:focus, &:focus-visible
+    @include variables.focus-visible()
+
+  &:disabled
+    background-color: variables.$color_a_dark
+    color: variables.$color_b_dark
+    cursor: not-allowed
