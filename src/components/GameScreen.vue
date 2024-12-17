@@ -2,6 +2,7 @@
 import {onMounted} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
+import IngameMenu from "./IngameMenu.vue";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -13,9 +14,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="menu-container">
-    <h1>Here be game</h1>
-    <button @click="props.flowController.mainMenu()">Main menu</button>
-    <button @click="props.flowController.credits()">Credits</button>
-  </div>
+  <div class="root"></div>
+  <ingame-menu :flowController="props.flowController"></ingame-menu>
 </template>

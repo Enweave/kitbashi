@@ -8,10 +8,12 @@ export const enum Screen {
 
 export class FlowController {
     currentScreen = ref<Screen>(Screen.MainMenu);
+    paused = ref(false);
 
     constructor() {
         console.log('FlowController created');
         this.currentScreen = ref(Screen.MainMenu);
+        this.paused = ref(false);
     }
 
     startGame() {
@@ -22,5 +24,9 @@ export class FlowController {
     }
     credits() {
         this.currentScreen.value = Screen.Credits;
+    }
+
+    togglePause() {
+        this.paused.value = !this.paused.value;
     }
 }
