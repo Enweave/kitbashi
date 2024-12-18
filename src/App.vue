@@ -13,7 +13,7 @@ const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
 
 const flowController = new FlowController();
-const inputConstroller = new InputController(flowController);
+const inputController = new InputController(flowController);
 
 let resizeScreen = function () {
   if (containerRef.value && screenRef.value) {
@@ -33,7 +33,6 @@ let resizeScreen = function () {
 
 onMounted(() => {
   resizeScreen();
-  console.log('App mounted', inputConstroller);
   window.addEventListener('resize', () => {
     resizeScreen();
   });
@@ -45,7 +44,7 @@ onMounted(() => {
   <div id="container" class="container" ref="containerRef">
     <div id="screen" class="screen" ref="screenRef">
       <main-menu-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.MainMenu"/>
-      <game-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Game"/>
+      <game-screen :flowController="flowController" :inputController="inputController" v-if="flowController.currentScreen.value === Screen.Game"/>
       <credits-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Credits"/>
     </div>
   </div>

@@ -59,9 +59,9 @@ export class InputController {
         let direction: MovementDirection = {x: 0, y: 0};
 
         direction.x += this.keyState.value.get(InputActions.left) ? -1 : 0;
-        direction.x += this.keyState.value.get(InputActions.down) ? 1 : 0;
-        direction.y += this.keyState.value.get(InputActions.down) ? -1 : 0;
-        direction.y += this.keyState.value.get(InputActions.up) ? 1 : 0;
+        direction.x += this.keyState.value.get(InputActions.right) ? 1 : 0;
+        direction.y += this.keyState.value.get(InputActions.up) ? -1 : 0;
+        direction.y += this.keyState.value.get(InputActions.down) ? 1 : 0;
 
         return direction;
     }

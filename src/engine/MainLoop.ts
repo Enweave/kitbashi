@@ -1,7 +1,7 @@
 import {FlowController} from "./FlowController.ts";
 import {watch} from "vue";
 
-interface Task {
+export interface Task {
     update: (delta: number) => void;
 }
 
@@ -43,7 +43,6 @@ export class MainLoop {
             if (delta > this.frameDuration) {
                 this.lastTime = currentTime;
                 this.update(delta);
-                console.log('MainLoop running', delta);
             }
         }
         handler();
