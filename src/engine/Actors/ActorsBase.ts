@@ -23,7 +23,7 @@ export class Vector2 {
 }
 
 export class Actor {
-    body: Body<Circle> | null = null;
+    body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
     radius: number = 10;
     collisionGroup: CollisionGroup = CollisionGroup.None;
     sprite: Sprite = new Sprite();
@@ -34,8 +34,8 @@ export class Actor {
 
     currentVelocity: Vector2 = {x: 0, y: 0};
     deceleration: number = 0.1;
-    acceleration: number = 1;
-    maxSpeed: number = 5;
+    acceleration: number = 0.7;
+    maxSpeed: number = 1;
 
     constructor() {}
 
@@ -52,6 +52,8 @@ export class Actor {
             this.radius, bodyOptions
         );
 
+        system.insert(this.body);
+
         this.updateSpritePosition();
     }
 
@@ -64,10 +66,21 @@ export class Actor {
 
     updateVelocity(delta: number) {
         if(this.body) {
-            this.currentVelocity.x *= 1 - this.deceleration;
-            this.currentVelocity.y *= 1 - this.deceleration;
-            this.body.pos.x += this.currentVelocity.x * delta;
-            this.body.pos.y += this.currentVelocity.y * delta;
+            this.currentVelocity.x *= (1 - this.deceleration);
+            this.currentVelocity.y *= (1 - this.deceleration);
+
+            // clamp currentVelocity length to maxSpeed
+            const speed = Math.sqrt(this.currentVelocity.x * this.currentVelocity.x + this.currentVelocity.y * this.currentVelocity.y);
+            if(speed > this.maxSpeed) {
+                const factor = this.maxSpeed / speed;
+                this.currentVelocity.x *= factor;
+                this.currentVelocity.y *= factor;
+            }
+
+            this.body.setPosition(
+                this.body.pos.x + delta * this.currentVelocity.x,
+                this.body.pos.y + delta * this.currentVelocity.y,
+            true);
         }
     }
 }
@@ -80,6 +93,9 @@ export class Scene {
     constructor(rootElement: HTMLElement) {
         this.collisionSystem = new System();
         this.rootElement = rootElement;
+
+        const line = this.collisionSystem.createLine(new Vector2(100, 100), new Vector2(1000, 100), {group: CollisionGroup.None});
+        this.collisionSystem.insert(line);
     }
 
     addActor(actor: Actor, position: PotentialVector) {
@@ -90,6 +106,9 @@ export class Scene {
     update(delta: number) {
         for(let actor of this.actors) {
             actor.updateVelocity(delta);
+            this.collisionSystem.checkOne(actor.body, (response) => {
+                console.log('collision detected', response);
+            });
             actor.updateSpritePosition();
         }
     }
