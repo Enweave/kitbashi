@@ -1,8 +1,10 @@
-import {System, Circle, PotentialVector, Body, BodyOptions} from "detect-collisions";
+import {System, Circle, Body, BodyOptions} from "detect-collisions";
 import {Sprite} from "./Sprite.ts";
+import {Vector2} from "../Utils.ts";
+import {LOW_VELOCITY_THRESHOLD} from "../Constants.ts";
 
 
-enum CollisionGroup {
+enum EntityType {
     None = 0,
     Player = 1,
     Enemy = 2,
@@ -12,104 +14,82 @@ enum CollisionGroup {
     Projectile = 8
 }
 
-export class Vector2 {
-    x: number;
-    y: number;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 export class Actor {
-    body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
-    radius: number = 10;
-    collisionGroup: CollisionGroup = CollisionGroup.None;
+    maxHealth: number = 1;
+    radius: number = 15;
+    entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
+    acceleration: number = 0.002;
+    maxSpeed: number = 0.4;
+    deceleration: number = 0.007;
 
-    sceneSizeX: number = 1000;
-    sceneSizeY: number = 900;
-    rootElement: HTMLElement | null = null;
+    _isAlive: boolean = true;
+    _isInvulnerable: boolean = false;
+    _currentHealth: number = 1;
 
-    currentVelocity: Vector2 = {x: 0, y: 0};
-    deceleration: number = 0.1;
-    acceleration: number = 0.7;
-    maxSpeed: number = 1;
+    controllerDirection: Vector2 = new Vector2(0, 0);
+    _currentVelocity: Vector2 = new Vector2(0, 0);
+
+    _body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
 
     constructor() {}
 
-    attach(system: System, rootElement: HTMLElement, position: PotentialVector) {
+    attach(system: System, rootElement: HTMLElement, position: Vector2) {
         this.sprite.attachToRoot(rootElement);
-        this.rootElement = rootElement;
 
         const bodyOptions: BodyOptions = {
-            group: this.collisionGroup,
+            userData: this,
         }
 
-        this.body = system.createCircle(
+        this._body = system.createCircle(
             position,
             this.radius, bodyOptions
         );
 
-        system.insert(this.body);
+        system.insert(this._body);
 
         this.updateSpritePosition();
     }
 
     updateSpritePosition() {
-        if(this.body && this.rootElement) {
-            const scaleFactor = this.rootElement.clientWidth / this.sceneSizeX;
-            this.sprite.updatePosition(this.body.pos.x * scaleFactor, this.body.pos.y * scaleFactor);
+        if(this._body) {
+            this.sprite.updatePosition(this._body.pos.x, this._body.pos.y);
         }
     }
 
-    updateVelocity(delta: number) {
-        if(this.body) {
-            this.currentVelocity.x *= (1 - this.deceleration);
-            this.currentVelocity.y *= (1 - this.deceleration);
+    tick(delta: number) {
+        this.updateMovement(delta);
+        this.updateSpritePosition();
+    }
 
-            // clamp currentVelocity length to maxSpeed
-            const speed = Math.sqrt(this.currentVelocity.x * this.currentVelocity.x + this.currentVelocity.y * this.currentVelocity.y);
-            if(speed > this.maxSpeed) {
-                const factor = this.maxSpeed / speed;
-                this.currentVelocity.x *= factor;
-                this.currentVelocity.y *= factor;
+    updateMovement(delta: number) {
+        if(this._body) {
+            let accelerationX: number;
+            let  accelerationY: number;
+            if(this.controllerDirection.x != 0 || this.controllerDirection.y != 0) {
+                accelerationX = this.controllerDirection.x * this.acceleration * delta;
+                accelerationY = this.controllerDirection.y * this.acceleration * delta;
+                this._currentVelocity.x += accelerationX;
+                this._currentVelocity.y += accelerationY;
+            } else {
+                if (this._currentVelocity.getLength() > LOW_VELOCITY_THRESHOLD) {
+                    this._currentVelocity.x -= this._currentVelocity.x * this.deceleration * delta;
+                    this._currentVelocity.y -= this._currentVelocity.y * this.deceleration * delta;
+                } else {
+                    this._currentVelocity.x = 0;
+                    this._currentVelocity.y = 0;
+                }
             }
 
-            this.body.setPosition(
-                this.body.pos.x + delta * this.currentVelocity.x,
-                this.body.pos.y + delta * this.currentVelocity.y,
+            this._currentVelocity.clampLength(this.maxSpeed);
+
+            // clamp currentVelocity length to maxSpeed
+
+            this._body.setPosition(
+                this._body.pos.x + delta * this._currentVelocity.x,
+                this._body.pos.y + delta * this._currentVelocity.y,
             true);
         }
     }
 }
 
-export class Scene {
-    collisionSystem: System;
-    rootElement: HTMLElement;
-    actors: Actor[] = [];
-
-    constructor(rootElement: HTMLElement) {
-        this.collisionSystem = new System();
-        this.rootElement = rootElement;
-
-        const line = this.collisionSystem.createLine(new Vector2(100, 100), new Vector2(1000, 100), {group: CollisionGroup.None});
-        this.collisionSystem.insert(line);
-    }
-
-    addActor(actor: Actor, position: PotentialVector) {
-        actor.attach(this.collisionSystem, this.rootElement, position);
-        this.actors.push(actor);
-    }
-
-    update(delta: number) {
-        for(let actor of this.actors) {
-            actor.updateVelocity(delta);
-            this.collisionSystem.checkOne(actor.body, (response) => {
-                console.log('collision detected', response);
-            });
-            actor.updateSpritePosition();
-        }
-    }
-}

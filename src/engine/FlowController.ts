@@ -1,4 +1,5 @@
 import {ref} from 'vue'
+import {Vector2} from "./Utils.ts";
 
 export const enum Screen {
     MainMenu,
@@ -8,10 +9,10 @@ export const enum Screen {
 
 export class FlowController {
     currentScreen = ref<Screen>(Screen.MainMenu);
+    viewportContainerSize = ref<Vector2>(new Vector2(0, 0));
     paused = ref(false);
 
     constructor() {
-        console.log('FlowController created');
         this.currentScreen = ref(Screen.MainMenu);
         this.paused = ref(false);
     }

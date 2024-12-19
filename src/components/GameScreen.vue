@@ -3,37 +3,36 @@ import {onMounted, ref} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
 import IngameMenu from "./IngameMenu.vue";
-import {MainLoop, Task} from "../engine/MainLoop.ts";
-import {Actor, Scene} from "../engine/Actors/ActorsBase.ts";
-import {Player} from "../engine/Actors/Player.ts";
+import {MainLoop} from "../engine/MainLoop.ts";
 import {InputController} from "../engine/InputController.ts";
+import {Scene} from "../engine/SceneController.ts";
+import {Player} from "../engine/Actors/Player.ts";
+import {Vector2} from "../engine/Utils.ts";
+import {VIEWPORT_WIDTH} from "../engine/Constants.ts";
+import {Actor} from "../engine/Actors/ActorsBase.ts";
 
 const props = defineProps<{
   flowController: FlowController;
   inputController: InputController;
 }>();
 
-const rootRef = ref<HTMLElement | null>(null);
+const viewportRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   const mainLoop = new MainLoop(props.flowController);
-  const scene = new Scene(rootRef.value!);
+  const scene = new Scene(props.flowController, viewportRef.value!);
 
-  scene.addActor(new Player(props.inputController), {x: 500, y: 500});
+  scene.addActor(new Player(props.inputController), {x: VIEWPORT_WIDTH/2, y: VIEWPORT_WIDTH/2} as Vector2);
+  scene.addActor(new Actor(), {x: 100, y: 100} as Vector2);
 
-  const updateSceneTask = {
-    update: (delta) => {
-      scene.update(delta);
-    }
-  } as Task;
 
-  mainLoop.addTask(updateSceneTask);
+  mainLoop.addTask(scene);
 
   mainLoop.start();
 })
 </script>
 
 <template>
-  <div class="root" ref="rootRef"></div>
+  <div class="viewport" ref="viewportRef"></div>
   <ingame-menu :flowController="props.flowController"></ingame-menu>
 </template>

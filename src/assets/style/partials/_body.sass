@@ -1,10 +1,10 @@
 @use "variables"
 
 html, body
+  touch-action: none
   background-color: variables.$color_a_dark
   color: variables.$color_a_light
   font-family: variables.$font_family_default
-  // style for selected text
 *::selection
   background-color: variables.$color_a_light
   color: variables.$color_a_dark
@@ -20,7 +20,6 @@ html, body
   justify-content: center
 
 .screen
-  outline: 1px solid variables.$color_a_light
   background-color: variables.$color_b_dark
 
 .menu-container
