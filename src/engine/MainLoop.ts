@@ -9,7 +9,7 @@ export class MainLoop {
     private tasks: Task[] = [];
     private loopHandle: number | null = null;
     private lastTime = 0;
-    private FPS: number = 60;
+    private FPS: number = 64;
     private frameDuration = 1000 / this.FPS;
     private flowController: FlowController;
 

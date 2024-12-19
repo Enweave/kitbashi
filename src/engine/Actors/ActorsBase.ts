@@ -19,9 +19,9 @@ export class Actor {
     radius: number = 15;
     entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
-    acceleration: number = 0.002;
-    maxSpeed: number = 0.4;
-    deceleration: number = 0.007;
+    acceleration: number = 0.001;
+    maxSpeed: number = 0.2;
+    deceleration: number = 0.004;
 
     _isAlive: boolean = true;
     _isInvulnerable: boolean = false;
