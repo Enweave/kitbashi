@@ -1,6 +1,6 @@
 import {System, Circle, Body, BodyOptions} from "detect-collisions";
 import {Sprite} from "./Sprite.ts";
-import {Vector2} from "../Utils.ts";
+import {Timer, Vector2} from "../Utils.ts";
 import {LOW_VELOCITY_THRESHOLD} from "../Constants.ts";
 import {FlowController} from "../FlowController.ts";
 
@@ -18,7 +18,7 @@ export enum EntityType {
 export class Actor {
     maxHealth: number = 1;
     radius: number = 15;
-    entityType: EntityType = EntityType.Enemy;
+    entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
     acceleration: number = 0.001;
     maxSpeed: number = 0.2;
@@ -33,6 +33,8 @@ export class Actor {
 
     _body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
     flowController: FlowController | null = null;
+
+    timers: Timer[] = [];
 
     constructor() {}
 
@@ -81,6 +83,14 @@ export class Actor {
     }
 
     tick(delta: number) {
+        this.timers.forEach((timer) => {
+            if(timer.exhausted) {
+                this.timers = this.timers.filter((t) => t !== timer);
+            } else {
+                timer.tick(delta);
+            }
+        });
+
         this.updateMovement(delta);
         this.updateSpritePosition();
     }

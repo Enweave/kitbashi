@@ -24,3 +24,23 @@ export class Vector2 {
 export function clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
 }
+
+export class Timer {
+    private _duration: number;
+    private _callback: () => void;
+    exhausted: boolean = false;
+
+    constructor(duration: number, callback: () => void) {
+        this._duration = duration;
+        this._callback = callback;
+    }
+
+    tick(delta: number) {
+        this._duration -= delta;
+        if(this._duration <= 0) {
+            this.exhausted = true;
+            this._callback();
+            this._callback = () => {};
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import {Actor, EntityType} from "./ActorsBase.ts";
 import {InputController} from "../InputController.ts";
-import {Vector2} from "../Utils.ts";
+import {Timer, Vector2} from "../Utils.ts";
 import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
 
 
@@ -50,10 +50,10 @@ export class Player extends Actor {
         if (this.flowController) {
             this.flowController.playerState.lives.value -= 1;
         }
-        setTimeout(() => {
+        this.timers.push(new Timer(IVULNERABILITY_DURATION_MS, () => {
             this.reanimate();
             this._isInvulnerable = false;
             this.sprite.htmlElement.classList.remove('blink');
-        }, IVULNERABILITY_DURATION_MS);
+        }));
     }
 }
