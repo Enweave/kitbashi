@@ -4,13 +4,30 @@ import {Vector2} from "./Utils.ts";
 export const enum Screen {
     MainMenu,
     Game,
-    Credits
+    EndGame
+}
+
+export class PlayerState {
+    score = ref<number>(0);
+    lives = ref<number>(3);
+    weaponGrade = ref<number>(1);
+
+    reset() {
+        this.score.value = 0;
+        this.lives.value = 3;
+        this.weaponGrade.value = 1;
+    }
 }
 
 export class FlowController {
     currentScreen = ref<Screen>(Screen.MainMenu);
     viewportContainerSize = ref<Vector2>(new Vector2(0, 0));
+
+    playerState = new PlayerState();
+
     paused = ref(false);
+    gameWon = ref(false);
+
     showDebugCanvas = ref<boolean>(JSON.parse(localStorage.getItem('showDebugCanvas') || 'false'));
 
     constructor() {
@@ -20,19 +37,32 @@ export class FlowController {
         watch(this.showDebugCanvas, (newValue) => {
             localStorage.setItem('showDebugCanvas', JSON.stringify(newValue));
         });
+
+        watch(this.playerState.lives, (newValue) => {
+            if (newValue <= 0) {
+                this.loseGame();
+            }
+        });
     }
 
     startGame() {
         this.paused.value = false;
         this.currentScreen.value = Screen.Game;
+        this.playerState.reset();
     }
 
     mainMenu() {
         this.currentScreen.value = Screen.MainMenu;
     }
 
-    credits() {
-        this.currentScreen.value = Screen.Credits;
+    winGame() {
+        this.gameWon.value = true;
+        this.currentScreen.value = Screen.EndGame;
+    }
+
+    loseGame() {
+        this.gameWon.value = false;
+        this.currentScreen.value = Screen.EndGame;
     }
 
     togglePause() {

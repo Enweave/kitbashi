@@ -18,8 +18,14 @@ onMounted(() => {
 
 <template>
   <div class="menu-container" ref="menuRef">
-    <h1>Credits go here</h1>
-    <button @click="props.flowController.mainMenu()">Main menu</button>
+    <template v-if="flowController.gameWon.value">
+      <h1>VICTORY!</h1>
+      <button @click="props.flowController.mainMenu()">Main menu</button>
+    </template>
+    <template v-else>
+      <h1>Game over</h1>
+      <button @click="props.flowController.mainMenu()">Main menu</button>
+    </template>
   </div>
 </template>
 

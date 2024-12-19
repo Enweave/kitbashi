@@ -3,11 +3,11 @@
 import {FlowController, Screen} from "./engine/FlowController.ts";
 import MainMenuScreen from "./components/MainMenuScreen.vue";
 import GameScreen from "./components/GameScreen.vue";
-import CreditsScreen from "./components/CreditsScreen.vue";
 import {onMounted, ref} from "vue";
 import {InputController} from "./engine/InputController.ts";
 import {ASPECT_RATIO} from "./engine/Constants.ts";
 import {Vector2} from "./engine/Utils.ts";
+import EndgameScreen from "./components/EndgameScreen.vue";
 
 const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
@@ -58,7 +58,7 @@ onMounted(() => {
     <div id="screen" class="screen" ref="screenRef">
       <main-menu-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.MainMenu"/>
       <game-screen :flowController="flowController" :inputController="inputController" v-if="flowController.currentScreen.value === Screen.Game"/>
-      <credits-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.Credits"/>
+      <endgame-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.EndGame"/>
     </div>
   </div>
 </template>

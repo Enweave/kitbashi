@@ -25,6 +25,7 @@ onMounted(() => {
 
   scene.addActor(new Player(props.inputController), {x: VIEWPORT_WIDTH/2, y: VIEWPORT_WIDTH/2} as Vector2);
   scene.addActor(new Actor(), {x: 100, y: 100} as Vector2);
+  scene.addActor(new Actor(), {x: 200, y: 100} as Vector2);
 
 
   mainLoop.addTask(scene);
@@ -35,6 +36,10 @@ onMounted(() => {
 
 <template>
   <div class="viewport" ref="viewportRef">
+    <div class="ingame-ui">
+      <div class="score">Score: {{props.flowController.playerState.score.value }}</div>
+      <div class="lives">Lives: {{props.flowController.playerState.lives.value }}</div>
+    </div>
     <canvas v-show="flowController.showDebugCanvas.value" class="debug-canvas" ref="debugCanvasRef"></canvas>
   </div>
 
