@@ -2,6 +2,7 @@ import {System, Circle, Body, BodyOptions} from "detect-collisions";
 import {Sprite} from "./Sprite.ts";
 import {Vector2} from "../Utils.ts";
 import {LOW_VELOCITY_THRESHOLD} from "../Constants.ts";
+import {FlowController} from "../FlowController.ts";
 
 
 export enum EntityType {
@@ -17,7 +18,7 @@ export enum EntityType {
 export class Actor {
     maxHealth: number = 1;
     radius: number = 15;
-    entityType: EntityType = EntityType.None;
+    entityType: EntityType = EntityType.Enemy;
     sprite: Sprite = new Sprite();
     acceleration: number = 0.001;
     maxSpeed: number = 0.2;
@@ -31,10 +32,30 @@ export class Actor {
     _currentVelocity: Vector2 = new Vector2(0, 0);
 
     _body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
+    flowController: FlowController | null = null;
 
     constructor() {}
 
-    attach(system: System, rootElement: HTMLElement, position: Vector2) {
+    reanimate() {
+        this._currentHealth = this.maxHealth;
+        this._isAlive = true;
+    }
+
+    death() {
+        this._isAlive = false;
+    }
+
+    damage(amount: number) {
+        if (!this._isAlive || this._isInvulnerable) {
+            return;
+        }
+        this._currentHealth -= amount;
+        if(this._currentHealth <= 0) {
+            this.death();
+        }
+    }
+
+    attach(system: System, rootElement: HTMLElement, position: Vector2, flowController: FlowController) {
         this.sprite.attachToRoot(rootElement);
 
         const bodyOptions: BodyOptions = {
@@ -49,6 +70,8 @@ export class Actor {
         system.insert(this._body);
 
         this.updateSpritePosition();
+
+        this.flowController = flowController;
     }
 
     updateSpritePosition() {

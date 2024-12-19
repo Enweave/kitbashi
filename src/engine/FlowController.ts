@@ -56,11 +56,13 @@ export class FlowController {
     }
 
     winGame() {
+        this.paused.value = true;
         this.gameWon.value = true;
         this.currentScreen.value = Screen.EndGame;
     }
 
     loseGame() {
+        this.paused.value = true;
         this.gameWon.value = false;
         this.currentScreen.value = Screen.EndGame;
     }

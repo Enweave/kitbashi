@@ -5,6 +5,7 @@ import {watch} from "vue";
 import {Actor} from "./Actors/ActorsBase.ts";
 import {Vector2} from "./Utils.ts";
 import {Task} from "./MainLoop.ts";
+import {ActorInteractions} from "./Actors/Interactions.ts";
 
 export class Scene implements Task{
     VIEWPORT_WIDTH = VIEWPORT_WIDTH;
@@ -41,7 +42,7 @@ export class Scene implements Task{
     }
 
     addActor(actor: Actor, position: Vector2) {
-        actor.attach(this.collisionSystem, this.viewportElement, position);
+        actor.attach(this.collisionSystem, this.viewportElement, position, this.flowController);
         this.actors.push(actor);
     }
 
@@ -49,7 +50,7 @@ export class Scene implements Task{
         for(let actor of this.actors) {
             actor.tick(delta);
             this.collisionSystem.checkOne(actor._body, (response) => {
-                console.log('collision detected', response);
+                ActorInteractions.dispatchCollision(response);
             });
         }
 
@@ -64,5 +65,6 @@ export class Scene implements Task{
                 ctx.stroke();
             }
         }
+
     }
 }

@@ -1,7 +1,7 @@
 import {Actor, EntityType} from "./ActorsBase.ts";
 import {InputController} from "../InputController.ts";
 import {Vector2} from "../Utils.ts";
-import {ASPECT_RATIO, VIEWPORT_WIDTH} from "../Constants.ts";
+import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
 
 
 export class Player extends Actor {
@@ -41,6 +41,19 @@ export class Player extends Actor {
         this.controllerDirection = this.input.getDirection() as Vector2;
         this.keepInBounds();
         super.tick(delta);
+    }
 
+    death() {
+        super.death();
+        this.sprite.htmlElement.classList.add('blink');
+        this._isInvulnerable = true;
+        if (this.flowController) {
+            this.flowController.playerState.lives.value -= 1;
+        }
+        setTimeout(() => {
+            this.reanimate();
+            this._isInvulnerable = false;
+            this.sprite.htmlElement.classList.remove('blink');
+        }, IVULNERABILITY_DURATION_MS);
     }
 }

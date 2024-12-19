@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
 import IngameMenu from "./IngameMenu.vue";
@@ -18,10 +18,13 @@ const props = defineProps<{
 
 const viewportRef = ref<HTMLElement | null>(null);
 const debugCanvasRef = ref<HTMLCanvasElement | null>(null);
+let mainLoop: MainLoop;
+let scene: Scene;
 
 onMounted(() => {
-  const mainLoop = new MainLoop(props.flowController);
-  const scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
+  console.log('GameScreen mounted');
+  mainLoop = new MainLoop(props.flowController);
+  scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
 
   scene.addActor(new Player(props.inputController), {x: VIEWPORT_WIDTH/2, y: VIEWPORT_WIDTH/2} as Vector2);
   scene.addActor(new Actor(), {x: 100, y: 100} as Vector2);
@@ -29,8 +32,13 @@ onMounted(() => {
 
 
   mainLoop.addTask(scene);
-
   mainLoop.start();
+})
+
+onUnmounted(() => {
+  mainLoop.stop();
+  mainLoop = null as any;
+  scene = null as any;
 })
 </script>
 
@@ -38,7 +46,7 @@ onMounted(() => {
   <div class="viewport" ref="viewportRef">
     <div class="ingame-ui">
       <div class="score">Score: {{props.flowController.playerState.score.value }}</div>
-      <div class="lives">Lives: {{props.flowController.playerState.lives.value }}</div>
+      <div class="lives">Lives: {{props.flowController.playerState.lives.value - 1}}</div>
     </div>
     <canvas v-show="flowController.showDebugCanvas.value" class="debug-canvas" ref="debugCanvasRef"></canvas>
   </div>
