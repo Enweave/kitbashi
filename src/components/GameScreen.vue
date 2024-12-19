@@ -17,10 +17,11 @@ const props = defineProps<{
 }>();
 
 const viewportRef = ref<HTMLElement | null>(null);
+const debugCanvasRef = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
   const mainLoop = new MainLoop(props.flowController);
-  const scene = new Scene(props.flowController, viewportRef.value!);
+  const scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
 
   scene.addActor(new Player(props.inputController), {x: VIEWPORT_WIDTH/2, y: VIEWPORT_WIDTH/2} as Vector2);
   scene.addActor(new Actor(), {x: 100, y: 100} as Vector2);
@@ -33,6 +34,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="viewport" ref="viewportRef"></div>
+  <div class="viewport" ref="viewportRef">
+    <canvas v-show="flowController.showDebugCanvas.value" class="debug-canvas" ref="debugCanvasRef"></canvas>
+  </div>
+
   <ingame-menu :flowController="props.flowController"></ingame-menu>
 </template>

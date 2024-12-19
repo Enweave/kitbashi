@@ -12,16 +12,22 @@ export class Scene implements Task{
 
     collisionSystem: System;
     viewportElement: HTMLElement;
+    debugCanvasElement: HTMLCanvasElement;
     flowController: FlowController;
     actors: Actor[] = [];
 
-    constructor(inFlowController: FlowController, inViewportElement: HTMLElement) {
+    constructor(inFlowController: FlowController, inViewportElement: HTMLElement, inDebugCanvasElement: HTMLCanvasElement) {
+        this.debugCanvasElement = inDebugCanvasElement;
         this.flowController = inFlowController;
         this.collisionSystem = new System();
 
         this.viewportElement = inViewportElement;
         this.viewportElement.style.width = `${this.VIEWPORT_WIDTH}px`;
         this.viewportElement.style.height = `${this.VIEWPORT_HEIGHT}px`;
+
+        this.debugCanvasElement.width = this.VIEWPORT_WIDTH;
+        this.debugCanvasElement.height = this.VIEWPORT_HEIGHT;
+
         this.updateViewportZoom();
 
         watch(this.flowController.viewportContainerSize, () => {
@@ -45,6 +51,18 @@ export class Scene implements Task{
             this.collisionSystem.checkOne(actor._body, (response) => {
                 console.log('collision detected', response);
             });
+        }
+
+        if (this.flowController.showDebugCanvas.value) {
+            const ctx = this.debugCanvasElement.getContext('2d');
+            if (ctx) {
+                ctx.strokeStyle = "#FFFFFF";
+
+                ctx.clearRect(0, 0, this.VIEWPORT_WIDTH, this.VIEWPORT_HEIGHT);
+                ctx.beginPath();
+                this.collisionSystem.draw(ctx);
+                ctx.stroke();
+            }
         }
     }
 }

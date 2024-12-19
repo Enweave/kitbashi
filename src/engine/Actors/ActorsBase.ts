@@ -4,7 +4,7 @@ import {Vector2} from "../Utils.ts";
 import {LOW_VELOCITY_THRESHOLD} from "../Constants.ts";
 
 
-enum EntityType {
+export enum EntityType {
     None = 0,
     Player = 1,
     Enemy = 2,
@@ -82,8 +82,6 @@ export class Actor {
             }
 
             this._currentVelocity.clampLength(this.maxSpeed);
-
-            // clamp currentVelocity length to maxSpeed
 
             this._body.setPosition(
                 this._body.pos.x + delta * this._currentVelocity.x,

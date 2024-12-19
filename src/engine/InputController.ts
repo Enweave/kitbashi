@@ -43,6 +43,12 @@ export class InputController {
                     this.flowController.togglePause();
                 }
             }
+
+            if (e.key === 'r') {
+                console.log('reset');
+                this.flowController.showDebugCanvas.value = !this.flowController.showDebugCanvas.value;
+                console.log('showDebugCanvas', this.flowController.showDebugCanvas.value);
+            }
         });
 
         window.addEventListener('keyup', (e) => {
