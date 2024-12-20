@@ -15,12 +15,14 @@ export class Player extends Actor {
     BOTTOM_BOUND = VIEWPORT_WIDTH/ASPECT_RATIO-this.radius;
 
     mainWeapon: WeaponBase;
+    static initialSpawnPosition: Vector2 = new Vector2(30, Math.floor(VIEWPORT_WIDTH/ASPECT_RATIO/2));
 
     constructor(input: InputController) {
         super();
         this.input = input;
         this.mainWeapon = new WeaponBase(this);
         this.mainWeapon.spawnPosition = new Vector2(Math.floor(this.radius * 1.5), 0);
+        this.spawnPosition = Player.initialSpawnPosition;
     }
 
     keepInBounds() {
@@ -56,6 +58,8 @@ export class Player extends Actor {
         super.death();
         this.sprite.htmlElement.classList.add('blink');
         this._isInvulnerable = true;
+        this._body.pos.x = this.spawnPosition.x;
+        this._body.pos.y = this.spawnPosition.y;
         if (this.flowController) {
             this.flowController.playerState.lives.value -= 1;
         }
