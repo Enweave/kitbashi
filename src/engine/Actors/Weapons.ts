@@ -8,11 +8,12 @@ export class WeaponBase extends FeatureBase {
     owner: Actor;
     direction: Vector2 = new Vector2(1, 0);
     spawnPosition: Vector2 = new Vector2(0, 0);
+    cooldownTime = 300;
 
     constructor(owner: Actor) {
         super();
-        this.cooldownTime = 200;
         this.owner = owner;
+        this._timer.duration = this.cooldownTime;
     }
 
     activateCallback() {

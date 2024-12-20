@@ -46,9 +46,7 @@ export class InputController {
 
             // TODO: Remove this debug code
             if (e.key === 'r') {
-                console.log('reset');
                 this.flowController.showDebugCanvas.value = !this.flowController.showDebugCanvas.value;
-                console.log('showDebugCanvas', this.flowController.showDebugCanvas.value);
             }
             if (e.key === 't') {
                 this.flowController.playerState.lives.value -= 1;

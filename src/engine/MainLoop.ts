@@ -14,7 +14,6 @@ export class MainLoop {
     private flowController: FlowController;
 
     constructor(inFlowController: FlowController) {
-        console.log('MainLoop created');
         this.flowController = inFlowController;
 
         watch(this.flowController.paused, (newVal) => {

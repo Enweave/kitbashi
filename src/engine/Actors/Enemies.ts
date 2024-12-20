@@ -3,7 +3,7 @@ import {Actor, EntityType} from "./Base/ActorsBase.ts";
 // import {Sprite} from "./Base/Sprite.ts";
 
 export class EnemyBase extends Actor {
-    maxHealth = 1;
+    maxHealth = 2;
     // contactDamage: number = DAMAGE_BASE;
     // radius: number = 15;
     entityType: EntityType = EntityType.Enemy;
