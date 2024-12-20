@@ -26,21 +26,33 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 export class Timer {
-    private _duration: number;
+    private _timeLeft: number;
     private _callback: () => void;
+    public duration: number;
     exhausted: boolean = false;
+    callbackCalled: boolean = false;
 
     constructor(duration: number, callback: () => void) {
-        this._duration = duration;
+        this._timeLeft = duration;
+        this.duration = duration;
         this._callback = callback;
     }
 
+    reset() {
+        this._timeLeft = this.duration;
+        this.exhausted = false;
+        this.callbackCalled = false;
+    }
+
     tick(delta: number) {
-        this._duration -= delta;
-        if(this._duration <= 0) {
+        if(this.exhausted) {
+            return;
+        }
+        this._timeLeft -= delta;
+        if(this._timeLeft <= 0 && !this.callbackCalled) {
             this.exhausted = true;
+            this.callbackCalled = true;
             this._callback();
-            this._callback = () => {};
         }
     }
 }

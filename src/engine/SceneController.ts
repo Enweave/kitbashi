@@ -46,14 +46,12 @@ export class Scene implements Task{
         this.actors.push(actor);
     }
 
-    update(delta: number) {
-        for(let actor of this.actors) {
-            actor.tick(delta);
-            this.collisionSystem.checkOne(actor._body, (response) => {
-                ActorInteractions.dispatchCollision(response);
-            });
-        }
+    removeActor(actor: Actor) {
+        actor.sprite.htmlElement.remove();
+        this.collisionSystem.remove(actor._body);
+    }
 
+    drawDebugCollisions() {
         if (this.flowController.showDebugCanvas.value) {
             const ctx = this.debugCanvasElement.getContext('2d');
             if (ctx) {
@@ -65,6 +63,33 @@ export class Scene implements Task{
                 ctx.stroke();
             }
         }
+    }
 
+    update(delta: number) {
+        let actorsToRemove: Actor[] = [];
+
+        for(let actor of this.actors) {
+            if (actor._markedForDeletion) {
+                actorsToRemove.push(actor);
+                this.removeActor(actor);
+            } else {
+                actor.tick(delta);
+                this.collisionSystem.checkOne(actor._body, (response) => {
+                    ActorInteractions.dispatchCollision(response);
+                });
+            }
+        }
+
+        this.drawDebugCollisions()
+
+        // One day I'll implement object pooling, pinky promise
+        if (actorsToRemove.length > 0) {
+            this.actors = this.actors.filter((actor) => !actor._markedForDeletion);
+        }
+
+        if (this.flowController._spawnActorQueue.length > 0) {
+            const actor = this.flowController._spawnActorQueue.shift() as Actor;
+            this.addActor(actor, actor.spawnPosition);
+        }
     }
 }

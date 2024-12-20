@@ -77,7 +77,7 @@ export class InputController {
         return direction;
     }
 
-    isFire(): boolean {
+    isFiring(): boolean {
         return this.keyState.value.get(InputActions.fire) || false;
     }
 

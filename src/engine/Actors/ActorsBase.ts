@@ -1,7 +1,7 @@
 import {System, Circle, Body, BodyOptions} from "detect-collisions";
 import {Sprite} from "./Sprite.ts";
 import {Timer, Vector2} from "../Utils.ts";
-import {LOW_VELOCITY_THRESHOLD} from "../Constants.ts";
+import {DAMAGE_BASE, LOW_VELOCITY_THRESHOLD, SPEED_BASE} from "../Constants.ts";
 import {FlowController} from "../FlowController.ts";
 
 
@@ -16,12 +16,12 @@ export enum EntityType {
 }
 
 export class Actor {
-    maxHealth: number = 1;
+    maxHealth: number = DAMAGE_BASE;
     radius: number = 15;
     entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
     acceleration: number = 0.001;
-    maxSpeed: number = 0.2;
+    maxSpeed: number = SPEED_BASE;
     deceleration: number = 0.004;
 
     _isAlive: boolean = true;
@@ -32,8 +32,10 @@ export class Actor {
     _currentVelocity: Vector2 = new Vector2(0, 0);
 
     _body: Body<Circle> = new Circle({x: 0, y: 0}, 10);
+    _markedForDeletion: boolean = false;
     flowController: FlowController | null = null;
 
+    spawnPosition: Vector2 = new Vector2(0, 0);
     timers: Timer[] = [];
 
     constructor() {}
@@ -57,22 +59,23 @@ export class Actor {
         }
     }
 
-    attach(system: System, rootElement: HTMLElement, position: Vector2, flowController: FlowController) {
-        this.sprite.attachToRoot(rootElement);
-
+    createBody(system: System, position: Vector2) {
         const bodyOptions: BodyOptions = {
             userData: this,
-        }
+        };
 
         this._body = system.createCircle(
             position,
             this.radius, bodyOptions
         );
+    }
 
+    attach(system: System, rootElement: HTMLElement, position: Vector2, flowController: FlowController) {
+        this.sprite.attachToRoot(rootElement);
+        this.createBody(system, position);
         system.insert(this._body);
 
         this.updateSpritePosition();
-
         this.flowController = flowController;
     }
 

@@ -1,5 +1,6 @@
 import {ref, watch} from 'vue'
 import {Vector2} from "./Utils.ts";
+import {Actor} from "./Actors/ActorsBase.ts";
 
 export const enum Screen {
     MainMenu,
@@ -30,6 +31,8 @@ export class FlowController {
 
     showDebugCanvas = ref<boolean>(JSON.parse(localStorage.getItem('showDebugCanvas') || 'false'));
 
+    _spawnActorQueue: Actor[] = [];
+
     constructor() {
         this.currentScreen = ref(Screen.MainMenu);
         this.paused = ref(false);
@@ -49,6 +52,7 @@ export class FlowController {
         this.paused.value = false;
         this.currentScreen.value = Screen.Game;
         this.playerState.reset();
+        this._spawnActorQueue = [];
     }
 
     mainMenu() {

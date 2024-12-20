@@ -2,6 +2,7 @@ import {Actor, EntityType} from "./ActorsBase.ts";
 import {InputController} from "../InputController.ts";
 import {Timer, Vector2} from "../Utils.ts";
 import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
+import {WeaponBase} from "./Weapons.ts";
 
 
 export class Player extends Actor {
@@ -13,9 +14,13 @@ export class Player extends Actor {
     TOP_BOUND = this.radius;
     BOTTOM_BOUND = VIEWPORT_WIDTH/ASPECT_RATIO-this.radius;
 
+    mainWeapon: WeaponBase;
+
     constructor(input: InputController) {
         super();
         this.input = input;
+        this.mainWeapon = new WeaponBase(this);
+        this.mainWeapon.spawnPosition = new Vector2(Math.floor(this.radius * 1.5), 0);
     }
 
     keepInBounds() {
@@ -39,6 +44,10 @@ export class Player extends Actor {
 
     tick(delta: number) {
         this.controllerDirection = this.input.getDirection() as Vector2;
+        if (this.input.isFiring()) {
+            this.mainWeapon.activate();
+        }
+        this.mainWeapon.tick(delta);
         this.keepInBounds();
         super.tick(delta);
     }
