@@ -9,7 +9,8 @@ import {Scene} from "../engine/SceneController.ts";
 import {Player} from "../engine/Actors/Player.ts";
 import {Vector2} from "../engine/Utils.ts";
 import {VIEWPORT_WIDTH} from "../engine/Constants.ts";
-import {Actor} from "../engine/Actors/ActorsBase.ts";
+import {Actor} from "../engine/Actors/Base/ActorsBase.ts";
+import {EnemyBase} from "../engine/Actors/Enemies.ts";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -27,8 +28,8 @@ onMounted(() => {
   scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
 
   scene.addActor(new Player(props.inputController), {x: VIEWPORT_WIDTH/2, y: VIEWPORT_WIDTH/2} as Vector2);
-  scene.addActor(new Actor(), {x: 100, y: 100} as Vector2);
-  scene.addActor(new Actor(), {x: 200, y: 100} as Vector2);
+  scene.addActor(new EnemyBase(), {x: 100, y: 100} as Vector2);
+  scene.addActor(new EnemyBase(), {x: 200, y: 100} as Vector2);
 
 
   mainLoop.addTask(scene);

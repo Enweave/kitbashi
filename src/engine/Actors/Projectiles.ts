@@ -1,11 +1,11 @@
-import {Actor, EntityType} from "./ActorsBase.ts";
+import {Actor, EntityType} from "./Base/ActorsBase.ts";
 import {Vector2} from "../Utils.ts";
 import {PROJECTILE_SPEED} from "../Constants.ts";
-import {Sprite} from "./Sprite.ts";
+import {Sprite} from "./Base/Sprite.ts";
 
 export class ProjectileBase extends Actor {
     radius = 5;
-    entityType = EntityType.Projectile;
+    entityType = EntityType.PlayerProjectile;
     projectileDamage = 1;
     maxSpeed = PROJECTILE_SPEED;
     lifespan = 3 * 1000;

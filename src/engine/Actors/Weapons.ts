@@ -1,6 +1,6 @@
-import {FeatureBase} from "./Feature.ts";
+import {FeatureBase} from "./Base/Feature.ts";
 import {ProjectileBase} from "./Projectiles.ts";
-import {Actor} from "./ActorsBase.ts";
+import {Actor} from "./Base/ActorsBase.ts";
 import {Vector2} from "../Utils.ts";
 
 export class WeaponBase extends FeatureBase {

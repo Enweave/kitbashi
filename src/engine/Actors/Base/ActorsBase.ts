@@ -1,8 +1,8 @@
 import {System, Circle, Body, BodyOptions} from "detect-collisions";
 import {Sprite} from "./Sprite.ts";
-import {Timer, Vector2} from "../Utils.ts";
-import {DAMAGE_BASE, LOW_VELOCITY_THRESHOLD, SPEED_BASE} from "../Constants.ts";
-import {FlowController} from "../FlowController.ts";
+import {Timer, Vector2} from "../../Utils.ts";
+import {DAMAGE_BASE, LOW_VELOCITY_THRESHOLD, SPEED_BASE} from "../../Constants.ts";
+import {FlowController} from "../../FlowController.ts";
 
 
 export enum EntityType {
@@ -17,6 +17,7 @@ export enum EntityType {
 
 export class Actor {
     maxHealth: number = DAMAGE_BASE;
+    contactDamage: number = DAMAGE_BASE;
     radius: number = 15;
     entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
@@ -26,7 +27,7 @@ export class Actor {
 
     _isAlive: boolean = true;
     _isInvulnerable: boolean = false;
-    _currentHealth: number = 1;
+    _currentHealth: number = this.maxHealth;
 
     controllerDirection: Vector2 = new Vector2(0, 0);
     _currentVelocity: Vector2 = new Vector2(0, 0);
@@ -37,8 +38,6 @@ export class Actor {
 
     spawnPosition: Vector2 = new Vector2(0, 0);
     timers: Timer[] = [];
-
-    constructor() {}
 
     reanimate() {
         this._currentHealth = this.maxHealth;
@@ -71,6 +70,7 @@ export class Actor {
     }
 
     attach(system: System, rootElement: HTMLElement, position: Vector2, flowController: FlowController) {
+        this.reanimate();
         this.sprite.attachToRoot(rootElement);
         this.createBody(system, position);
         system.insert(this._body);

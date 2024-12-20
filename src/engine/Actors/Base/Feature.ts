@@ -1,4 +1,4 @@
-import {Timer} from "../Utils.ts";
+import {Timer} from "../../Utils.ts";
 
 export class FeatureBase {
     cooldownTime: number = 500;

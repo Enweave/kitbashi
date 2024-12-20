@@ -1,6 +1,6 @@
 import {ref, watch} from 'vue'
 import {Vector2} from "./Utils.ts";
-import {Actor} from "./Actors/ActorsBase.ts";
+import {Actor} from "./Actors/Base/ActorsBase.ts";
 
 export const enum Screen {
     MainMenu,

@@ -2,7 +2,7 @@ import {System} from "detect-collisions";
 import {FlowController} from "./FlowController.ts";
 import {ASPECT_RATIO, VIEWPORT_WIDTH} from "./Constants.ts";
 import {watch} from "vue";
-import {Actor} from "./Actors/ActorsBase.ts";
+import {Actor} from "./Actors/Base/ActorsBase.ts";
 import {Vector2} from "./Utils.ts";
 import {Task} from "./MainLoop.ts";
 import {ActorInteractions} from "./Actors/Interactions.ts";

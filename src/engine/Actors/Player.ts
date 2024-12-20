@@ -1,4 +1,4 @@
-import {Actor, EntityType} from "./ActorsBase.ts";
+import {Actor, EntityType} from "./Base/ActorsBase.ts";
 import {InputController} from "../InputController.ts";
 import {Timer, Vector2} from "../Utils.ts";
 import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
