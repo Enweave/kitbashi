@@ -16,9 +16,11 @@ export class EnemyBase extends Actor {
     // maxSpeed: number = SPEED_BASE;
     // deceleration: number = 0.004;
 
-    death() {
-        super.death();
-        this.flowController?.addScore(this.scoreCost);
+    death(_: Actor | null = null) {
+        super.death(_);
+        if (_?.entityType === EntityType.PlayerProjectile) {
+            this.flowController?.addScore(this.scoreCost);
+        }
         this._markedForDeletion = true;
     }
 

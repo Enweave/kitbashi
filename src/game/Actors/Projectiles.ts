@@ -25,8 +25,8 @@ export class ProjectileBase extends Actor {
         }
     }
 
-    death() {
-        super.death();
+    death(_: Actor | null = null) {
+        super.death(_);
         this._markedForDeletion = true;
     }
 }

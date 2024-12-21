@@ -56,8 +56,8 @@ export class Player extends Actor {
         super.tick(delta);
     }
 
-    death() {
-        super.death();
+    death(_: Actor | null = null) {
+        super.death(_);
         this.sprite.htmlElement.classList.add('blink');
         this._isInvulnerable = true;
         this._body.pos.x = this.spawnPosition.x;

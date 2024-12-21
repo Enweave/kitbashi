@@ -45,17 +45,17 @@ export class Actor {
         this._isAlive = true;
     }
 
-    death() {
+    death(_: Actor | null = null) {
         this._isAlive = false;
     }
 
-    damage(amount: number) {
+    damage(amount: number, _: Actor | null = null) {
         if (!this._isAlive || this._isInvulnerable) {
             return;
         }
         this._currentHealth -= amount;
         if(this._currentHealth <= 0) {
-            this.death();
+            this.death(_);
         }
     }
 

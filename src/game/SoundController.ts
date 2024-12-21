@@ -90,8 +90,6 @@ class SFXRegistry {
         this.sfxMap = new Map([
             [SFXSetType.fire, new SFX([
                 'LASRGun_Particle Compressor Fire_01.wav',
-                'BLLTRico_Metallic_11.wav',
-                'GUNPis_Pistol Fire Longer Tail_05.wav'
             ])],
             [SFXSetType.explosion, new SFX(['EXPLDsgn_Implode_15.wav'])]
         ]);
