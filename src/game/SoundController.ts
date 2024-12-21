@@ -38,7 +38,14 @@ class SFX {
     cacheFile(src: string) {
         if (!this.cacheMap[src]) {
             fetch(src).then(response => {
-                const type = response.headers.get('content-type') ?? '';
+                const type = response.headers.get('content-type');
+                if (!type) {
+                    return;
+                }
+                if (!type.includes('audio')) {
+                    console.error(`${src} is not an audio file`);
+                    return;
+                }
                 response.arrayBuffer().then(buffer => {
                     const blob = new Blob([buffer], {type: type});
                     this.cacheMap[src] = URL.createObjectURL(blob);
