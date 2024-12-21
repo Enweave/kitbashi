@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
 import {defineProps} from 'vue';
-import {FlowController} from "../engine/FlowController.ts";
+import {FlowController} from "../game/FlowController.ts";
 import SoundLevelSlider from "./SoundComponents/SoundLevelSlider.vue";
 
 const props = defineProps<{

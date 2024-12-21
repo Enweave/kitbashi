@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {FlowController, Screen} from "./engine/FlowController.ts";
+import {FlowController, Screen} from "./game/FlowController.ts";
 import MainMenuScreen from "./components/MainMenuScreen.vue";
 import GameScreen from "./components/GameScreen.vue";
 import {onMounted, ref} from "vue";
-import {InputController} from "./engine/InputController.ts";
-import {ASPECT_RATIO} from "./engine/Constants.ts";
-import {Vector2} from "./engine/Utils.ts";
+import {InputController} from "./game/InputController.ts";
+import {ASPECT_RATIO} from "./game/Constants.ts";
+import {Vector2} from "./game/Utils.ts";
 import EndgameScreen from "./components/EndgameScreen.vue";
-import {SoundController} from "./engine/SoundController.ts";
+import {SoundController} from "./game/SoundController.ts";
 import SFXPlayerComponent from "./components/SoundComponents/SFXPlayerComponent.vue";
 
 const containerRef = ref<HTMLElement | null>(null);

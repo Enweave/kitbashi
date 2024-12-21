@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from "vue";
 import {defineProps} from 'vue';
-import {FlowController} from "../engine/FlowController.ts";
+import {FlowController} from "../game/FlowController.ts";
 import IngameMenu from "./IngameMenu.vue";
-import {MainLoop} from "../engine/MainLoop.ts";
-import {InputController} from "../engine/InputController.ts";
-import {Scene} from "../engine/SceneController.ts";
-import {Player} from "../engine/Actors/Player.ts";
-import {LevelSequencer} from "../engine/LevelSequencer.ts";
-import {LevelTestWin} from "../engine/Levels/LevelTestWin.ts";
+import {MainLoop} from "../game/MainLoop.ts";
+import {InputController} from "../game/InputController.ts";
+import {Scene} from "../game/SceneController.ts";
+import {Player} from "../game/Actors/Player.ts";
+import {LevelSequencer} from "../game/LevelSequencer.ts";
+import {LevelTestWin} from "../game/Levels/LevelTestWin.ts";
+import {Vector2} from "../game/Utils.ts";
+import {VIEWPORT_WIDTH} from "../game/Constants.ts";
+import {EnemyRam, EnemyShooter} from "../game/Actors/Enemies.ts";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -33,8 +36,8 @@ onMounted(() => {
       scene,
       new LevelTestWin()
   );
-  // scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
-  // scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
+  scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
+  scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
 
   mainLoop.addTask(scene);
   mainLoop.addTask(levelSequencer);

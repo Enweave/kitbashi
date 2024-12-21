@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import { defineProps } from 'vue';
-import {FlowController} from "../engine/FlowController.ts";
+import {FlowController} from "../game/FlowController.ts";
 import SoundLevelSlider from "./SoundComponents/SoundLevelSlider.vue";
 
 const menuRef = ref<HTMLElement | null>(null);

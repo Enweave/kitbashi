@@ -2,7 +2,7 @@
 // props
 import {defineProps, nextTick, onMounted, ref} from "vue";
 
-import {SFXPlayer} from "../../engine/SoundController.ts";
+import {SFXPlayer} from "../../game/SoundController.ts";
 
 const audioRef = ref<HTMLAudioElement | null>(null);
 

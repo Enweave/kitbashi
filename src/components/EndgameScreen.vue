@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {defineProps} from 'vue';
-import {FlowController} from "../engine/FlowController.ts";
+import {FlowController} from "../game/FlowController.ts";
 
 const menuRef = ref<HTMLElement | null>(null);
 
