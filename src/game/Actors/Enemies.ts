@@ -1,8 +1,9 @@
 import {Actor, EntityType} from "./Base/ActorsBase.ts";
 import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
-import {Vector2} from "../Utils.ts";
+import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
 import {Sprite} from "./Base/Sprite.ts";
 import {WeaponEnemy} from "./Weapons.ts";
+import {SFXSetType} from "../SoundController.ts";
 // import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
 // import {Sprite} from "./Base/Sprite.ts";
 
@@ -21,6 +22,10 @@ export class EnemyBase extends Actor {
         if (_?.entityType === EntityType.PlayerProjectile) {
             this.flowController?.addScore(this.scoreCost);
         }
+        this.flowController?.soundController?.playSFX(
+            SFXSetType.explosion,
+            audioBalanceFromScreenPosition(this._body.pos.x), 1
+        );
         this._markedForDeletion = true;
     }
 

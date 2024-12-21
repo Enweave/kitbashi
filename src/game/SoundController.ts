@@ -131,7 +131,7 @@ export class SoundController {
     musicLevel: number = 1;
 
     sfxPlayers: Ref<SFXPlayer[]> = ref([]);
-    MAX_SFX_PLAYERS: number = 2;
+    MAX_SFX_PLAYERS: number = 16;
 
     constructor() {
         this.sfxRegistry = new SFXRegistry();
