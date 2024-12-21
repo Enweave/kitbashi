@@ -10,10 +10,11 @@ const sliderValue = ref(0);
 
 
 onMounted(() => {
-  sliderValue.value = model.value.value;
+  let v = model.value as {value: number};
+  sliderValue.value = v.value;
 
   watch(sliderValue, (value) => {
-    model.value.value = value;
+    v.value = value;
   })
 })
 

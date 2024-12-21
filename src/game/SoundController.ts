@@ -171,7 +171,6 @@ export class SoundController {
         if (player) {
             player.balance = finalBalance;
             player.volume = finalVolume;
-            console.log('vol', player.volume);
             player.sfx = this.sfxRegistry.sfxMap.get(sfxType) || null;
             player.play();
         }

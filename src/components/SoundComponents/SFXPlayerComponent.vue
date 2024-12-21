@@ -11,7 +11,8 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+  const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
   const audioCtx = new AudioContext();
   let source: MediaElementAudioSourceNode | null = null;
 
@@ -44,7 +45,6 @@ onMounted(() => {
 
 <template>
   <audio ref="audioRef" style="display: none"></audio>
-  <!--  <audio src="./sound/sfx/LASRGun_Particle%20Compressor%20Fire_01.wav" ref="audioRef" style="display: none"></audio>-->
 </template>
 
 <style scoped>
