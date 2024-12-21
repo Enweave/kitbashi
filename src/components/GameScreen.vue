@@ -12,6 +12,8 @@ import {Vector2} from "../engine/Utils.ts";
 // import {Actor} from "../engine/Actors/Base/ActorsBase.ts";
 import {EnemyBase, EnemyRam, EnemyShooter} from "../engine/Actors/Enemies.ts";
 import {VIEWPORT_WIDTH} from "../engine/Constants.ts";
+import {LevelSequencer} from "../engine/LevelSequencer.ts";
+import {LevelTestWin} from "../engine/Levels/LevelTestWin.ts";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -22,6 +24,7 @@ const viewportRef = ref<HTMLElement | null>(null);
 const debugCanvasRef = ref<HTMLCanvasElement | null>(null);
 let mainLoop: MainLoop;
 let scene: Scene;
+let levelSequencer: LevelSequencer;
 
 onMounted(() => {
   console.log('GameScreen mounted');
@@ -29,18 +32,26 @@ onMounted(() => {
   scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
 
   scene.addActor(new Player(props.inputController), Player.initialSpawnPosition);
-  scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
-  scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
 
+  levelSequencer = new LevelSequencer(
+      props.flowController,
+      scene,
+      new LevelTestWin()
+  );
+  // scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
+  // scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
 
   mainLoop.addTask(scene);
+  mainLoop.addTask(levelSequencer);
   mainLoop.start();
+  levelSequencer.beginSequence();
 })
 
 onUnmounted(() => {
   mainLoop.stop();
   mainLoop = null as any;
   scene = null as any;
+  levelSequencer = null as any;
 })
 </script>
 
