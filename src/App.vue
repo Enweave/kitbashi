@@ -8,12 +8,16 @@ import {InputController} from "./engine/InputController.ts";
 import {ASPECT_RATIO} from "./engine/Constants.ts";
 import {Vector2} from "./engine/Utils.ts";
 import EndgameScreen from "./components/EndgameScreen.vue";
+import {SoundController} from "./engine/SoundController.ts";
+import SFXPlayerComponent from "./components/SoundComponents/SFXPlayerComponent.vue";
 
 const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
 
-const flowController = new FlowController();
+const soundController = new SoundController();
+const flowController = new FlowController(soundController);
 const inputController = new InputController(flowController);
+
 
 let resizeScreen = function () {
   if (containerRef.value && screenRef.value) {
@@ -60,6 +64,7 @@ onMounted(() => {
       <game-screen :flowController="flowController" :inputController="inputController" v-if="flowController.currentScreen.value === Screen.Game"/>
       <endgame-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.EndGame"/>
     </div>
+    <s-f-x-player-component v-for="player in soundController.sfxPlayers.value" :sfx-player="player"></s-f-x-player-component>
   </div>
 </template>
 

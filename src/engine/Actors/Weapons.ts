@@ -1,7 +1,8 @@
 import {FeatureBase} from "./Base/Feature.ts";
 import {EnemyProjectile, PlayerProjectile, ProjectileBase} from "./Projectiles.ts";
 import {Actor} from "./Base/ActorsBase.ts";
-import {Vector2} from "../Utils.ts";
+import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
+import {SFXSetType} from "../SoundController.ts";
 
 export class WeaponBase extends FeatureBase {
     projectileClass = ProjectileBase;
@@ -19,10 +20,18 @@ export class WeaponBase extends FeatureBase {
         this._timer.duration = this.cooldownTime;
     }
 
+    playSound() {
+        this.owner.flowController?.soundController?.playSFX(
+            SFXSetType.fire,
+            audioBalanceFromScreenPosition(this.owner._body.pos.x), 1
+        );
+    }
+
     activateCallback() {
         const projectile = new this.projectileClass(this.spawnPosition, this.direction);
         projectile.spawnPosition = new Vector2(this.spawnPosition.x + this.owner._body.pos.x, this.spawnPosition.y + this.owner._body.pos.y);
         this.owner.flowController?._spawnActorQueue.push(projectile);
+        this.playSound();
     }
 }
 

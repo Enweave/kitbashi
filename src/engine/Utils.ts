@@ -1,3 +1,5 @@
+import {VIEWPORT_WIDTH} from "./Constants.ts";
+
 export class Vector2 {
     x: number;
     y: number;
@@ -55,4 +57,10 @@ export class Timer {
             this._callback();
         }
     }
+}
+
+export function audioBalanceFromScreenPosition(ActorPositionX: number): number {
+    const halfWidth = VIEWPORT_WIDTH / 2;
+    const balance = (ActorPositionX - halfWidth) / halfWidth;
+    return clamp(balance, -1, 1);
 }

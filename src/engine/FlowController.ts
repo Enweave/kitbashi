@@ -1,6 +1,7 @@
 import {ref, watch} from 'vue'
 import {Vector2} from "./Utils.ts";
 import {Actor} from "./Actors/Base/ActorsBase.ts";
+import {SoundController} from "./SoundController.ts";
 
 export const enum Screen {
     MainMenu,
@@ -22,6 +23,13 @@ export class PlayerState {
     }
 }
 
+enum StoreKeys {
+    showDebugCanvas = 'showDebugCanvas',
+    sfxLevel = 'sfxLevel',
+    musicLevel = 'musicLevel',
+}
+
+
 export class FlowController {
     currentScreen = ref<Screen>(Screen.MainMenu);
     viewportContainerSize = ref<Vector2>(new Vector2(0, 0));
@@ -31,16 +39,34 @@ export class FlowController {
     paused = ref(false);
     gameWon = ref(false);
 
-    showDebugCanvas = ref<boolean>(JSON.parse(localStorage.getItem('showDebugCanvas') || 'false'));
+    showDebugCanvas = ref<boolean>(JSON.parse(localStorage.getItem(StoreKeys.showDebugCanvas) || 'false'));
+    soundController: SoundController | null = null;
+    sfxLevel = ref<number>(JSON.parse(localStorage.getItem(StoreKeys.sfxLevel) || '0.1'));
+    musicLevel = ref<number>(JSON.parse(localStorage.getItem(StoreKeys.musicLevel) || '1'));
 
     _spawnActorQueue: Actor[] = [];
 
-    constructor() {
+    constructor(soundController: SoundController) {
+        this.soundController = soundController;
         this.currentScreen = ref(Screen.MainMenu);
         this.paused = ref(false);
 
+
+        this.soundController.setSFXLevel(this.sfxLevel.value);
+        this.soundController.setMusicLevel(this.musicLevel.value);
+
         watch(this.showDebugCanvas, (newValue) => {
-            localStorage.setItem('showDebugCanvas', JSON.stringify(newValue));
+            localStorage.setItem(StoreKeys.showDebugCanvas, JSON.stringify(newValue));
+        });
+
+        watch(this.sfxLevel, (newValue) => {
+            localStorage.setItem(StoreKeys.sfxLevel, JSON.stringify(newValue));
+            this.soundController?.setSFXLevel(newValue);
+        });
+
+        watch(this.musicLevel, (newValue) => {
+            localStorage.setItem(StoreKeys.musicLevel, JSON.stringify(newValue));
+            this.soundController?.setMusicLevel(newValue);
         });
 
         watch(this.playerState.lives, (newValue) => {

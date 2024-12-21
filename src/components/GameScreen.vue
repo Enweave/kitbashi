@@ -7,11 +7,6 @@ import {MainLoop} from "../engine/MainLoop.ts";
 import {InputController} from "../engine/InputController.ts";
 import {Scene} from "../engine/SceneController.ts";
 import {Player} from "../engine/Actors/Player.ts";
-import {Vector2} from "../engine/Utils.ts";
-// import {VIEWPORT_WIDTH} from "../engine/Constants.ts";
-// import {Actor} from "../engine/Actors/Base/ActorsBase.ts";
-import {EnemyBase, EnemyRam, EnemyShooter} from "../engine/Actors/Enemies.ts";
-import {VIEWPORT_WIDTH} from "../engine/Constants.ts";
 import {LevelSequencer} from "../engine/LevelSequencer.ts";
 import {LevelTestWin} from "../engine/Levels/LevelTestWin.ts";
 

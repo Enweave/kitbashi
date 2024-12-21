@@ -2,6 +2,7 @@
 import {computed, ref, watch} from "vue";
 import {defineProps} from 'vue';
 import {FlowController} from "../engine/FlowController.ts";
+import SoundLevelSlider from "./SoundComponents/SoundLevelSlider.vue";
 
 const props = defineProps<{
   flowController: FlowController;
@@ -26,6 +27,7 @@ watch(props.flowController.paused, (paused) => {
     <div class="menu-container">
       <h1>Pause</h1>
       <button @click="props.flowController.mainMenu()">Main menu</button>
+      <sound-level-slider title="SFX" v-model="flowController.sfxLevel"></sound-level-slider>
     </div>
   </div>
 </template>
