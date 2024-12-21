@@ -44,6 +44,9 @@
     border: 1px solid variables.$color_b_light
     background: variables.$color_a_dark
 
-  &.enemy-shooter:after
-    border: 1px solid variables.$color_b_light
-    background: variables.$color_a_light
+  &.enemy-shooter
+    &:after
+      border: 1px solid variables.$color_b_light
+      background: variables.$color_a_dark
+      transform: translate(-50%, -50%) rotate(-45deg)
+

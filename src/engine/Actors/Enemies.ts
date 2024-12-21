@@ -18,6 +18,7 @@ export class EnemyBase extends Actor {
 
     death() {
         super.death();
+        this.flowController?.addScore(this.scoreCost);
         this._markedForDeletion = true;
     }
 
@@ -35,6 +36,7 @@ export class EnemyRam extends EnemyBase {
     maxHealth = DAMAGE_BASE * 2;
     maxSpeed: number = SPEED_BASE * 0.5;
     sprite = new Sprite(['enemy-ram']);
+    scoreCost = 100;
 
     constructor() {
         super();
@@ -47,6 +49,7 @@ export class EnemyShooter extends EnemyBase {
     maxSpeed: number = SPEED_BASE * 0.5;
     sprite = new Sprite(['enemy-shooter']);
     weapon: WeaponEnemy;
+    scoreCost = 200;
 
     constructor() {
         super();

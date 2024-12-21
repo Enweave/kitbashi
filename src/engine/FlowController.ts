@@ -9,6 +9,7 @@ export const enum Screen {
 }
 
 export class PlayerState {
+    playerActor: Actor | null = null;
     score = ref<number>(0);
     lives = ref<number>(3);
     weaponGrade = ref<number>(1);
@@ -17,6 +18,7 @@ export class PlayerState {
         this.score.value = 0;
         this.lives.value = 3;
         this.weaponGrade.value = 1;
+        this.playerActor = null;
     }
 }
 
@@ -53,6 +55,14 @@ export class FlowController {
         this.currentScreen.value = Screen.Game;
         this.playerState.reset();
         this._spawnActorQueue = [];
+    }
+
+    addScore(score: number) {
+        this.playerState.score.value += score;
+    }
+
+    setPlayerActor(actor: Actor) {
+        this.playerState.playerActor = actor;
     }
 
     mainMenu() {

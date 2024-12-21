@@ -15,7 +15,6 @@ export class ActorInteractions {
         }
 
         if (actor1.entityType === EntityType.PlayerProjectile && actor2.entityType === EntityType.Enemy) {
-            console.log('hit', actor1.contactDamage, actor2._currentHealth);
             actor2.damage(actor1.contactDamage);
             actor1.death();
         }

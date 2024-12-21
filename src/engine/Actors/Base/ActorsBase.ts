@@ -38,6 +38,7 @@ export class Actor {
 
     spawnPosition: Vector2 = new Vector2(0, 0);
     timers: Timer[] = [];
+    scoreCost: number = 0;
 
     reanimate() {
         this._currentHealth = this.maxHealth;

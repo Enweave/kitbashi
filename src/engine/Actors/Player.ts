@@ -24,6 +24,7 @@ export class Player extends Actor {
         this.mainWeapon.spawnPosition = new Vector2(Math.floor(this.radius * 1.5), 0);
         this.mainWeapon.postInit();
         this.spawnPosition = Player.initialSpawnPosition;
+        this.flowController?.setPlayerActor(this);
     }
 
     keepInBounds() {

@@ -29,7 +29,7 @@ onMounted(() => {
   scene = new Scene(props.flowController, viewportRef.value!, debugCanvasRef.value!);
 
   scene.addActor(new Player(props.inputController), Player.initialSpawnPosition);
-  scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 30} as Vector2);
+  scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
   scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
 
 
