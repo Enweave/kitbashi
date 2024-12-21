@@ -5,8 +5,7 @@ import {Sprite} from "./Base/Sprite.ts";
 
 export class ProjectileBase extends Actor {
     radius = 5;
-    entityType = EntityType.PlayerProjectile;
-    projectileDamage = 1;
+    entityType = EntityType.Projectile;
     maxSpeed = PROJECTILE_SPEED;
     lifespan = 3 * 1000;
     acceleration = 1;
@@ -30,4 +29,15 @@ export class ProjectileBase extends Actor {
         super.death();
         this._markedForDeletion = true;
     }
+}
+
+export class EnemyProjectile extends ProjectileBase {
+    entityType = EntityType.Enemy;
+    sprite = new Sprite(['projectile']);
+
+}
+
+export class PlayerProjectile extends ProjectileBase {
+    entityType = EntityType.PlayerProjectile;
+    sprite = new Sprite(['player-projectile']);
 }

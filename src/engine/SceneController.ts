@@ -34,6 +34,8 @@ export class Scene implements Task{
         watch(this.flowController.viewportContainerSize, () => {
             this.updateViewportZoom();
         });
+
+
     }
 
     updateViewportZoom() {
@@ -66,12 +68,10 @@ export class Scene implements Task{
     }
 
     update(delta: number) {
-        let actorsToRemove: Actor[] = [];
-
         for(let actor of this.actors) {
             if (actor._markedForDeletion) {
-                actorsToRemove.push(actor);
                 this.removeActor(actor);
+                this.actors = this.actors.filter((a) => a !== actor);
             } else {
                 actor.tick(delta);
                 this.collisionSystem.checkOne(actor._body, (response) => {
@@ -83,9 +83,6 @@ export class Scene implements Task{
         this.drawDebugCollisions()
 
         // One day I'll implement object pooling, pinky promise
-        if (actorsToRemove.length > 0) {
-            this.actors = this.actors.filter((actor) => !actor._markedForDeletion);
-        }
 
         if (this.flowController._spawnActorQueue.length > 0) {
             const actor = this.flowController._spawnActorQueue.shift() as Actor;

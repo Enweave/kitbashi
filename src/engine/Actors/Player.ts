@@ -2,7 +2,7 @@ import {Actor, EntityType} from "./Base/ActorsBase.ts";
 import {InputController} from "../InputController.ts";
 import {Timer, Vector2} from "../Utils.ts";
 import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
-import {WeaponBase} from "./Weapons.ts";
+import {WeaponBase, WeaponPlayer} from "./Weapons.ts";
 
 
 export class Player extends Actor {
@@ -20,8 +20,9 @@ export class Player extends Actor {
     constructor(input: InputController) {
         super();
         this.input = input;
-        this.mainWeapon = new WeaponBase(this);
+        this.mainWeapon = new WeaponPlayer(this);
         this.mainWeapon.spawnPosition = new Vector2(Math.floor(this.radius * 1.5), 0);
+        this.mainWeapon.postInit();
         this.spawnPosition = Player.initialSpawnPosition;
     }
 

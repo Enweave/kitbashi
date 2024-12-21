@@ -1,5 +1,5 @@
 import {FeatureBase} from "./Base/Feature.ts";
-import {ProjectileBase} from "./Projectiles.ts";
+import {EnemyProjectile, PlayerProjectile, ProjectileBase} from "./Projectiles.ts";
 import {Actor} from "./Base/ActorsBase.ts";
 import {Vector2} from "../Utils.ts";
 
@@ -13,6 +13,9 @@ export class WeaponBase extends FeatureBase {
     constructor(owner: Actor) {
         super();
         this.owner = owner;
+    }
+
+    postInit() {
         this._timer.duration = this.cooldownTime;
     }
 
@@ -20,5 +23,25 @@ export class WeaponBase extends FeatureBase {
         const projectile = new this.projectileClass(this.spawnPosition, this.direction);
         projectile.spawnPosition = new Vector2(this.spawnPosition.x + this.owner._body.pos.x, this.spawnPosition.y + this.owner._body.pos.y);
         this.owner.flowController?._spawnActorQueue.push(projectile);
+    }
+}
+
+export class WeaponEnemy extends WeaponBase {
+    projectileClass = EnemyProjectile;
+    direction: Vector2 = new Vector2(-1, 0);
+    cooldownTime = 1200;
+}
+
+export class WeaponPlayer extends WeaponBase {
+    projectileClass = PlayerProjectile;
+    direction: Vector2 = new Vector2(1, 0);
+    cooldownTime = 300;
+    currentGrade: number = 1;
+    maxGrade: number = 3;
+
+    upgrade() {
+        if (this.currentGrade < this.maxGrade) {
+            this.currentGrade++;
+        }
     }
 }
