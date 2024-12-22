@@ -26,6 +26,9 @@ export class Player extends Actor {
         this.mainWeapon = new WeaponPlayer(this);
         this.mainWeapon.postInit();
         this.spawnPosition = Player.initialSpawnPosition;
+    }
+
+    afterAttach() {
         this.flowController?.setPlayerActor(this);
     }
 

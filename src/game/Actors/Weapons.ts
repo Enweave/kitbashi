@@ -124,7 +124,7 @@ export class WeaponPlayer extends WeaponBase {
                 ),
             ]),
         ];
-        this.currentLaunchSlot = 1;
+        this.currentLaunchSlot = 0;
     }
 
     upgrade() {

@@ -78,7 +78,10 @@ export class Actor {
 
         this.updateSpritePosition();
         this.flowController = flowController;
+        this.afterAttach();
     }
+
+    afterAttach() {}
 
     updateSpritePosition() {
         if(this._body) {

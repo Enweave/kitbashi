@@ -37,7 +37,7 @@ onMounted(() => {
       new LevelTestWin()
   );
   scene.addActor(new EnemyRam(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
-  scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH * 2, y: 200} as Vector2);
+  scene.addActor(new EnemyShooter(), {x: VIEWPORT_WIDTH, y: 200} as Vector2);
 
   mainLoop.addTask(scene);
   mainLoop.addTask(levelSequencer);

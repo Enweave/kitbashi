@@ -91,6 +91,10 @@ export class FlowController {
         this.playerState.playerActor = actor;
     }
 
+    getPlayerActor(): Actor | null {
+        return this.playerState.playerActor;
+    }
+
     mainMenu() {
         this.currentScreen.value = Screen.MainMenu;
     }
