@@ -2,9 +2,9 @@ import {Actor, EntityType} from "./Base/ActorsBase.ts";
 import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
 import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
 import {Sprite} from "./Base/Sprite.ts";
-import {WeaponEnemy} from "./Weapons.ts";
 import {SFXSetType} from "../SoundController.ts";
 import {BodyOptions, System} from "detect-collisions";
+import {WeaponEnemyShooter} from "./Weapons.ts";
 // import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
 // import {Sprite} from "./Base/Sprite.ts";
 
@@ -70,14 +70,13 @@ export class EnemyShooter extends EnemyBase {
     maxHealth = DAMAGE_BASE;
     maxSpeed: number = SPEED_BASE * 0.5;
     sprite = new Sprite(['enemy-shooter']);
-    weapon: WeaponEnemy;
+    weapon: WeaponEnemyShooter;
     scoreCost = 200;
 
     constructor() {
         super();
         this.controllerDirection = new Vector2(-1, 0);
-        this.weapon = new WeaponEnemy(this);
-        this.weapon.spawnPosition = new Vector2(-this.radius-5, 0);
+        this.weapon = new WeaponEnemyShooter(this);
         this.weapon.postInit();
     }
 

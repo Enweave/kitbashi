@@ -13,7 +13,8 @@ export class ProjectileBase extends Actor {
 
     constructor(position: Vector2, direction: Vector2) {
         super();
-        this._body.setPosition(position.x, position.y, true);
+        this._body.setPosition(position.x, position.y);
+        this.spawnPosition = position;
         this.controllerDirection = direction;
     }
 

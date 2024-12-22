@@ -85,8 +85,11 @@ export class Scene implements Task{
         // One day I'll implement object pooling, pinky promise
 
         if (this.flowController._spawnActorQueue.length > 0) {
-            const actor = this.flowController._spawnActorQueue.shift() as Actor;
-            this.addActor(actor, actor.spawnPosition);
+            for (let i = 0; i < this.flowController._spawnActorQueue.length; i++) {
+                const actor = this.flowController._spawnActorQueue[i] as Actor;
+                this.addActor(actor, actor.spawnPosition);
+            }
+            this.flowController._spawnActorQueue = [];
         }
     }
 }
