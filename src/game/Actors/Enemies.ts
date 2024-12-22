@@ -11,7 +11,7 @@ import {BodyOptions, System} from "detect-collisions";
 export class EnemyBase extends Actor {
     // maxHealth = DAMAGE_BASE;
     // contactDamage: number = DAMAGE_BASE;
-    // radius: number = 15;
+    radius: number = 30;
     entityType: EntityType = EntityType.Enemy;
     // sprite: Sprite = new Sprite();
     // acceleration: number = 0.001;

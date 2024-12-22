@@ -69,6 +69,8 @@
 
   &.player
     &:before
+      width: 80px
+      height: 80px
       background: url("/assets/sprites/player/body0001.png") no-repeat
       background-size: contain
       animation: player 0.2s steps(5) infinite
@@ -94,11 +96,11 @@
 
   &.player-projectile
     &:after
-      width: 20px
-      height: 20px
+      width: 15px
+      height: 15px
       border-radius: 100%
-      border: 1px solid variables.$color_a_dark
-      background: variables.$color_a_light
+      border: 1px solid variables.$color_b_light
+      background: variables.$color_a_dark
     &:before
       background: none
 

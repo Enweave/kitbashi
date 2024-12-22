@@ -10,6 +10,7 @@ import {BodyOptions, System} from "detect-collisions";
 export class Player extends Actor {
     input: InputController;
     entityType = EntityType.Player;
+    radius: number = 40;
     sprite = new Sprite(['player']);
     LEFT_BOUND = this.radius;
     RIGHT_BOUND = VIEWPORT_WIDTH-this.radius;
