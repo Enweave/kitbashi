@@ -1,6 +1,5 @@
 @use "variables";
 
-
 .sound-level-slider {
   display: flex;
   gap: variables.$gutter;
@@ -76,6 +75,7 @@ $contrast: 100% !default;
     &::-ms-fill-upper {
       background: lighten($track-color, $contrast);
     }
+    @include variables.focus-visible()
   }
 
   &::-webkit-slider-runnable-track {
