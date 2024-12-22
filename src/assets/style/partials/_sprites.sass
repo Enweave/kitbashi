@@ -8,7 +8,6 @@
   100%
     opacity: 0
 
-
 @keyframes spin
   0%
     transform: translate(-50%, -50%) rotate(0deg)
@@ -48,7 +47,22 @@
     background: url("/assets/sprites/player/body0005.png") no-repeat
     background-size: contain
 
-
+@keyframes boss
+  0%
+    background: url("/assets/sprites/boss/body0001.png") no-repeat
+    background-size: contain
+  20%
+    background: url("/assets/sprites/boss/body0002.png") no-repeat
+    background-size: contain
+  40%
+    background: url("/assets/sprites/boss/body0003.png") no-repeat
+    background-size: contain
+  60%
+    background: url("/assets/sprites/boss/body0004.png") no-repeat
+    background-size: contain
+  80%
+    background: url("/assets/sprites/boss/body0005.png") no-repeat
+    background-size: contain
 
 .sprite
   position: absolute
@@ -81,6 +95,17 @@
     &.lean-down
       &:before
         transform: translate(-50%, -50%) rotate(15deg)
+    &:after
+      background: none
+
+  &.boss
+    &:before
+      width: 200px
+      height: 200px
+      background: url("/assets/sprites/boss/body0001.png") no-repeat
+      background-size: contain
+      animation: boss 0.2s steps(5) infinite
+      transition: transform 0.2s
     &:after
       background: none
 
@@ -122,3 +147,26 @@
     &:after
       background: url("/assets/sprites/shooter/body.png") no-repeat
       background-size: contain
+
+  &.enemy-sniper
+    &:before
+      background: url("/assets/sprites/sniper/body.png") no-repeat
+      background-size: contain
+    &:after
+      background: none
+
+  &.enemy-mine
+    &:before
+      background: url("/assets/sprites/mine/body.png") no-repeat
+      animation: wiggle 0.8s linear infinite
+      background-size: contain
+    &:after
+      background: none
+
+  &.enemy-bomber
+    &:before
+      background: url("/assets/sprites/bomber/body.png") no-repeat
+      animation: wiggle-vertical 0.8s linear infinite
+      background-size: contain
+    &:after
+      background: none
