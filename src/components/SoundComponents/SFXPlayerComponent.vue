@@ -1,8 +1,7 @@
 <script setup lang="ts">
-// props
-import {defineProps, nextTick, onMounted, ref} from "vue";
+import { defineProps, nextTick, onMounted, ref } from 'vue';
 
-import {SFXPlayer} from "../../game/SoundController.ts";
+import { SFXPlayer } from '../../game/SoundController.ts';
 
 const audioRef = ref<HTMLAudioElement | null>(null);
 
@@ -11,8 +10,8 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-
-  const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+  const AudioContext =
+    window.AudioContext || (window as any).webkitAudioContext;
   const audioCtx = new AudioContext();
   let source: MediaElementAudioSourceNode | null = null;
 
@@ -27,7 +26,7 @@ onMounted(() => {
 
   audioRef.value!.onended = () => {
     props.sfxPlayer.busy = false;
-  }
+  };
 
   props.sfxPlayer.playCallback = () => {
     audioRef.value!.src = props.sfxPlayer.currentSrc;
@@ -38,15 +37,10 @@ onMounted(() => {
       audioCtx.resume();
       audioRef.value!.play();
     });
-  }
-})
-
+  };
+});
 </script>
 
 <template>
   <audio ref="audioRef" style="display: none"></audio>
 </template>
-
-<style scoped>
-
-</style>

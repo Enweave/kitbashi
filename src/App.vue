@@ -1,15 +1,14 @@
 <script setup lang="ts">
-
-import {FlowController, Screen} from "./game/FlowController.ts";
-import MainMenuScreen from "./components/MainMenuScreen.vue";
-import GameScreen from "./components/GameScreen.vue";
-import {onMounted, ref} from "vue";
-import {InputController} from "./game/InputController.ts";
-import {ASPECT_RATIO} from "./game/Constants.ts";
-import {Vector2} from "./game/Utils.ts";
-import EndgameScreen from "./components/EndgameScreen.vue";
-import {SoundController} from "./game/SoundController.ts";
-import SFXPlayerComponent from "./components/SoundComponents/SFXPlayerComponent.vue";
+import { FlowController, Screen } from './game/FlowController.ts';
+import MainMenuScreen from './components/MainMenuScreen.vue';
+import GameScreen from './components/GameScreen.vue';
+import { onMounted, ref } from 'vue';
+import { InputController } from './game/InputController.ts';
+import { ASPECT_RATIO } from './game/Constants.ts';
+import { Vector2 } from './game/Utils.ts';
+import EndgameScreen from './components/EndgameScreen.vue';
+import { SoundController } from './game/SoundController.ts';
+import SFXPlayerComponent from './components/SoundComponents/SFXPlayerComponent.vue';
 
 const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
@@ -17,7 +16,6 @@ const screenRef = ref<HTMLElement | null>(null);
 const soundController = new SoundController();
 const flowController = new FlowController(soundController);
 const inputController = new InputController(flowController);
-
 
 let resizeScreen = function () {
   if (containerRef.value && screenRef.value) {
@@ -31,7 +29,6 @@ let resizeScreen = function () {
     if (containerAspectRatio > ASPECT_RATIO) {
       resultWidth = containerHeight * ASPECT_RATIO;
       resultHeight = containerHeight;
-
     } else {
       resultWidth = containerWidth;
       resultHeight = containerWidth / ASPECT_RATIO;
@@ -40,9 +37,12 @@ let resizeScreen = function () {
     screenRef.value.style.width = `${resultWidth}px`;
     screenRef.value.style.height = `${resultHeight}px`;
 
-    flowController.viewportContainerSize.value = new Vector2(resultWidth, resultHeight);
+    flowController.viewportContainerSize.value = new Vector2(
+      resultWidth,
+      resultHeight
+    );
   }
-}
+};
 
 onMounted(() => {
   resizeScreen();
@@ -53,20 +53,31 @@ onMounted(() => {
   window.addEventListener('orientationchange', () => {
     resizeScreen();
   });
-})
-
+});
 </script>
 
 <template>
   <div id="container" class="container" ref="containerRef">
     <div id="screen" class="screen" ref="screenRef">
-      <main-menu-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.MainMenu"/>
-      <game-screen :flowController="flowController" :inputController="inputController" v-if="flowController.currentScreen.value === Screen.Game"/>
-      <endgame-screen :flowController="flowController" v-if="flowController.currentScreen.value === Screen.EndGame"/>
+      <main-menu-screen
+        :flowController="flowController"
+        v-if="flowController.currentScreen.value === Screen.MainMenu"
+      />
+      <game-screen
+        :flowController="flowController"
+        :inputController="inputController"
+        v-if="flowController.currentScreen.value === Screen.Game"
+      />
+      <endgame-screen
+        :flowController="flowController"
+        v-if="flowController.currentScreen.value === Screen.EndGame"
+      />
     </div>
-    <s-f-x-player-component v-for="player in soundController.sfxPlayers.value" :sfx-player="player"></s-f-x-player-component>
+    <s-f-x-player-component
+      v-for="player in soundController.sfxPlayers.value"
+      :sfx-player="player"
+    ></s-f-x-player-component>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
