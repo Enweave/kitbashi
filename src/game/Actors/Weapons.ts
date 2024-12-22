@@ -41,7 +41,7 @@ export class WeaponBase extends FeatureBase {
         this._timer.duration = this.cooldownTime;
     }
 
-    getCurrentLaunchParams() : LaunchParams[] {
+    getCurrentLaunchParams(): LaunchParams[] {
         const slot = this.launchSlots[this.currentLaunchSlot];
         let finalParams: LaunchParams[] = [];
         for (let i = 0; i < slot.launchParamsList.length; i++) {
@@ -95,6 +95,74 @@ export class WeaponEnemyShooter extends WeaponBase {
         ];
     }
 }
+
+export class WeaponEnemyBomber extends WeaponBase {
+    projectileClass = EnemyProjectile;
+    cooldownTime = 600;
+
+    constructor(owner: Actor) {
+        super(owner);
+        this.owner = owner;
+        this.launchSlots = [
+            new LaunchSlot([
+                new LaunchParams(
+                    new Vector2(0, 30),
+                    new Vector2(0, 1)),
+            ]),
+        ];
+    }
+}
+
+export class WeaponEnemyMine extends WeaponBase {
+    projectileClass = EnemyProjectile;
+    cooldownTime = 1;
+
+    constructor(owner: Actor) {
+        super(owner);
+        this.owner = owner;
+
+
+        const centerOffsetLength = 35;
+        const launchParams: LaunchParams[] = [];
+        for (let i = 0; i < 8; i++) {
+            const angle = i * Math.PI / 4;
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+            launchParams.push(new LaunchParams(
+                new Vector2(cos * centerOffsetLength, sin * centerOffsetLength),
+                new Vector2(cos, sin)
+            ));
+        }
+
+        this.launchSlots = [
+            new LaunchSlot(launchParams),
+        ];
+    }
+}
+
+export class WeaponEnemyMineSecondary extends WeaponBase {
+    projectileClass = PlayerProjectile;
+    cooldownTime = 1;
+
+    constructor(owner: Actor) {
+        super(owner);
+        this.owner = owner;
+
+        const launchParams: LaunchParams[] = [];
+        for (let i = 0; i < 8; i++) {
+            const angle = i * Math.PI / 4;
+            launchParams.push(new LaunchParams(
+                new Vector2(0, 0),
+                new Vector2(Math.cos(angle), Math.sin(angle))
+            ));
+        }
+
+        this.launchSlots = [
+            new LaunchSlot(launchParams),
+        ];
+    }
+}
+
 
 export class WeaponPlayer extends WeaponBase {
     projectileClass = PlayerProjectile;

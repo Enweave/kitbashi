@@ -4,10 +4,9 @@ import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
 import {Sprite} from "./Base/Sprite.ts";
 import {SFXSetType} from "../SoundController.ts";
 import {BodyOptions, System} from "detect-collisions";
-import {WeaponEnemyShooter} from "./Weapons.ts";
+import {WeaponEnemyBomber, WeaponEnemyMine, WeaponEnemyMineSecondary, WeaponEnemyShooter} from "./Weapons.ts";
 import {FlowController} from "../FlowController.ts";
-// import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
-// import {Sprite} from "./Base/Sprite.ts";
+
 
 abstract class MovementPattern {
     // implements movement patterns for enemies, like sine wave, straight line, etc.
@@ -27,7 +26,7 @@ class MovementPatternSineWave extends MovementPattern {
     _accumulatedDelta: number = 0;
     xMultiplier: number = 1;
 
-    constructor(period: number = 1000, amplitude: number = 1, xMultiplier: number = 1) {
+    constructor(period: number = 1000, amplitude: number = 1, xMultiplier: number = -1) {
         super();
         this.sinePeriod = period;
         this.sineAmplitude = amplitude;
@@ -77,6 +76,37 @@ class MovementPatternTrackPlayerY extends MovementPattern {
     }
 }
 
+// enum MovementPatternType {
+//     StraightLine,
+//     SineWave,
+//     TrackPlayerY
+// }
+
+// class MovementPatterSwitcher {
+//     patternLine: MovementPatternStraightLine;
+//     patternSine: MovementPatternSineWave;
+//     patternTrack: MovementPatternTrackPlayerY;
+//
+//     constructor() {
+//         this.patternLine = new MovementPatternStraightLine();
+//         this.patternSine = new MovementPatternSineWave();
+//         this.patternTrack = new MovementPatternTrackPlayerY();
+//     }
+//
+//     getPattern(type: MovementPatternType): MovementPattern {
+//         switch (type) {
+//             case MovementPatternType.StraightLine:
+//                 return this.patternLine;
+//             case MovementPatternType.SineWave:
+//                 return this.patternSine;
+//             case MovementPatternType.TrackPlayerY:
+//                 return this.patternTrack;
+//             default:
+//                 return new MovementPatternStraightLine();
+//         }
+//     }
+// }
+
 
 export class EnemyBase extends Actor {
     // maxHealth = DAMAGE_BASE;
@@ -107,11 +137,11 @@ export class EnemyBase extends Actor {
         super.death(_);
         if (_?.entityType === EntityType.PlayerProjectile) {
             this.flowController?.addScore(this.scoreCost);
+            this.flowController?.soundController?.playSFX(
+                SFXSetType.explosion,
+                audioBalanceFromScreenPosition(this._body.pos.x), 1
+            );
         }
-        this.flowController?.soundController?.playSFX(
-            SFXSetType.explosion,
-            audioBalanceFromScreenPosition(this._body.pos.x), 1
-        );
         this._markedForDeletion = true;
     }
 
@@ -130,11 +160,6 @@ export class EnemyRam extends EnemyBase {
     maxSpeed: number = SPEED_BASE * 0.5;
     sprite = new Sprite(['enemy-ram']);
     scoreCost = 100;
-
-    constructor() {
-        super();
-        this.controllerDirection = new Vector2(-1, 0);
-    }
 }
 
 export class EnemyShooter extends EnemyBase {
@@ -143,25 +168,96 @@ export class EnemyShooter extends EnemyBase {
     sprite = new Sprite(['enemy-shooter']);
     weapon: WeaponEnemyShooter;
     scoreCost = 200;
-    // movementPattern: MovementPattern = new MovementPatternSineWave(2000, 1, -0);
 
     constructor() {
         super();
-        this.controllerDirection = new Vector2(-1, 0);
         this.weapon = new WeaponEnemyShooter(this);
         this.weapon.postInit();
-
     }
-    afterAttach() {
-        super.afterAttach();
-        if (this.flowController) {
-            this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(0, 0), 5);
-        }
+    // afterAttach() {
+    //     super.afterAttach();
+    //     if (this.flowController) {
+    //         this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(-1, 0), 5);
+    //     }
+    // }
+
+    tick(delta: number) {
+        super.tick(delta);
+        this.weapon.activate();
+        this.weapon.tick(delta);
+    }
+}
+
+export class EnemyBomber extends EnemyBase {
+    maxHealth = DAMAGE_BASE * 8;
+    maxSpeed: number = SPEED_BASE * 0.3;
+    sprite = new Sprite(['enemy-bomber']);
+    weapon: WeaponEnemyBomber;
+    scoreCost = 400;
+
+    constructor() {
+        super();
+        this.weapon = new WeaponEnemyBomber(this);
+        this.weapon.postInit();
+    }
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createBox(
+            position,
+            this.radius * 2,
+            this.radius * 2,
+            bodyOptions
+        );
+        this._body.setOffset({x:-this.radius, y:-this.radius} as SAT.Vector);
     }
 
     tick(delta: number) {
         super.tick(delta);
         this.weapon.activate();
         this.weapon.tick(delta);
+    }
+}
+
+export class EnemyMine extends EnemyBase {
+    maxHealth = DAMAGE_BASE * 1;
+    maxSpeed: number = SPEED_BASE * 0.2;
+    sprite = new Sprite(['enemy-mine']);
+    weapon: WeaponEnemyMine;
+    weaponsSecondary: WeaponEnemyMineSecondary;
+    scoreCost = 500;
+    exploded: boolean = false;
+
+    constructor() {
+        super();
+        this.weapon = new WeaponEnemyMine(this);
+        this.weapon.postInit();
+        this.weaponsSecondary = new WeaponEnemyMineSecondary(this);
+        this.weaponsSecondary.postInit();
+    }
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createCircle(
+            position,
+            this.radius,
+            bodyOptions
+        );
+    }
+
+    death(_: Actor | null = null) {
+        if (!this.exploded) {
+            this.exploded = true;
+            this.weapon.activate();
+            this.weaponsSecondary.activate();
+        }
+        super.death(_);
+
     }
 }
