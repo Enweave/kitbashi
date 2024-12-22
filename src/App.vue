@@ -78,6 +78,17 @@ onMounted(() => {
       :sfx-player="player"
     ></s-f-x-player-component>
   </div>
+  <div style="visibility: hidden;">
+    <!-- Dirty hack to preload all sprites <-->
+    <!-- also, sup, Quinten! -->
+    <div class="sprite player"></div>
+    <div class="sprite boss"></div>
+    <div class="sprite enemy-ram"></div>
+    <div class="sprite enemy-shooter"></div>
+    <div class="sprite enemy-sniper"></div>
+    <div class="sprite enemy-mine"></div>
+    <div class="sprite enemy-bomber"></div>
+  </div>
 </template>
 
 <style scoped></style>
