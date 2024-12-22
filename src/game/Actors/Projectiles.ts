@@ -4,7 +4,7 @@ import {PROJECTILE_SPEED} from "../Constants.ts";
 import {Sprite} from "./Base/Sprite.ts";
 
 export class ProjectileBase extends Actor {
-    radius = 5;
+    radius = 10;
     entityType = EntityType.Projectile;
     maxSpeed = PROJECTILE_SPEED;
     lifespan = 3 * 1000;

@@ -4,6 +4,7 @@ import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
 import {Sprite} from "./Base/Sprite.ts";
 import {WeaponEnemy} from "./Weapons.ts";
 import {SFXSetType} from "../SoundController.ts";
+import {BodyOptions, System} from "detect-collisions";
 // import {DAMAGE_BASE, SPEED_BASE} from "../Constants.ts";
 // import {Sprite} from "./Base/Sprite.ts";
 
@@ -16,6 +17,20 @@ export class EnemyBase extends Actor {
     // acceleration: number = 0.001;
     // maxSpeed: number = SPEED_BASE;
     // deceleration: number = 0.004;
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createBox(
+            position,
+            this.radius * 2,
+            this.radius * 1.2,
+            bodyOptions
+        );
+        this._body.setOffset({x:-this.radius, y:-this.radius*0.6} as SAT.Vector);
+    }
 
     death(_: Actor | null = null) {
         super.death(_);

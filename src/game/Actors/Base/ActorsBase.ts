@@ -18,12 +18,12 @@ export enum EntityType {
 export class Actor {
     maxHealth: number = DAMAGE_BASE;
     contactDamage: number = DAMAGE_BASE;
-    radius: number = 15;
+    radius: number = 30;
     entityType: EntityType = EntityType.None;
     sprite: Sprite = new Sprite();
-    acceleration: number = 0.001;
+    acceleration: number = 0.002;
     maxSpeed: number = SPEED_BASE;
-    deceleration: number = 0.004;
+    deceleration: number = 0.008;
 
     _isAlive: boolean = true;
     _isInvulnerable: boolean = false;

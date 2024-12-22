@@ -8,6 +8,31 @@
   100%
     opacity: 0
 
+
+@keyframes spin
+  0%
+    transform: translate(-50%, -50%) rotate(0deg)
+  100%
+    transform: translate(-50%, -50%) rotate(-360deg)
+
+@keyframes wiggle
+  0%
+    transform: translate(-50%, -50%)
+  50%
+    transform: translate(-47%, -50%) rotate(-2deg)
+  100%
+    transform: translate(-50%, -50%)
+
+@keyframes wiggle-vertical
+  0%
+    transform: translate(-50%, -50%)
+  50%
+    transform: translate(-50%, -45%) rotate(-2deg)
+  100%
+    transform: translate(-50%, -50%)
+
+
+
 .sprite
   position: absolute
   left: 0
@@ -15,35 +40,55 @@
   &.blink
     animation: blink 0.3s steps(1) infinite
 
-  &:after
+  &:after, &:before
     content: ""
     position: absolute
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)
-
-    width: 30px
-    height: 30px
-    background: variables.$color_a_light
-
-  &.projectile:after
-    width: 10px
-    height: 10px
-    border-radius: 100%
-    border: 1px solid variables.$color_a_light
     background: variables.$color_b_light
+    width: 60px
+    height: 60px
 
-  &.player-projectile:after
-    width: 10px
-    height: 10px
-    border-radius: 100%
-    border: 1px solid variables.$color_a_dark
-    background: variables.$color_a_light
+  &.projectile
+    &:after
+      width: 20px
+      height: 20px
+      border-radius: 100%
+      border: 1px solid variables.$color_a_light
+      background: variables.$color_b_light
+    &:before
+      background: none
 
-  &.enemy-ram:after, &.enemy-shooter:after
-    background: url("/assets/sprites/enemy.png") no-repeat
-    background-size: contain
+  &.player-projectile
+    &:after
+      width: 20px
+      height: 20px
+      border-radius: 100%
+      border: 1px solid variables.$color_a_dark
+      background: variables.$color_a_light
+    &:before
+      background: none
+  //&.enemy-ram:after, &.enemy-shooter:after
 
+  &.enemy-ram
+    &:before
+      background: url("/assets/sprites/ram/anim.png") no-repeat
+      background-size: contain
+      animation: wiggle-vertical 0.2s linear infinite
+    &:after
+      background: url("/assets/sprites/ram/body.png") no-repeat
+      background-size: contain
+
+
+  &.enemy-shooter
+    &:before
+      background: url("/assets/sprites/shooter/anim.png") no-repeat
+      background-size: contain
+      animation: wiggle 0.2s linear infinite
+    &:after
+      background: url("/assets/sprites/shooter/body.png") no-repeat
+      background-size: contain
 
   //&.enemy-shooter
   //  &:after
