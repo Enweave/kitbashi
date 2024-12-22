@@ -85,47 +85,10 @@ class MovementPatternTrackPlayerY extends MovementPattern {
     }
 }
 
-// enum MovementPatternType {
-//     StraightLine,
-//     SineWave,
-//     TrackPlayerY
-// }
-
-// class MovementPatterSwitcher {
-//     patternLine: MovementPatternStraightLine;
-//     patternSine: MovementPatternSineWave;
-//     patternTrack: MovementPatternTrackPlayerY;
-//
-//     constructor() {
-//         this.patternLine = new MovementPatternStraightLine();
-//         this.patternSine = new MovementPatternSineWave();
-//         this.patternTrack = new MovementPatternTrackPlayerY();
-//     }
-//
-//     getPattern(type: MovementPatternType): MovementPattern {
-//         switch (type) {
-//             case MovementPatternType.StraightLine:
-//                 return this.patternLine;
-//             case MovementPatternType.SineWave:
-//                 return this.patternSine;
-//             case MovementPatternType.TrackPlayerY:
-//                 return this.patternTrack;
-//             default:
-//                 return new MovementPatternStraightLine();
-//         }
-//     }
-// }
-
 
 export class EnemyBase extends Actor {
-    // maxHealth = DAMAGE_BASE;
-    // contactDamage: number = DAMAGE_BASE;
     radius: number = 30;
     entityType: EntityType = EntityType.Enemy;
-    // sprite: Sprite = new Sprite();
-    // acceleration: number = 0.001;
-    // maxSpeed: number = SPEED_BASE;
-    // deceleration: number = 0.004;
     movementPattern: MovementPattern = new MovementPatternStraightLine();
 
     createBody(system: System, position: Vector2) {
