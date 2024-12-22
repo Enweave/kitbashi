@@ -138,7 +138,7 @@ export class WeaponEnemyMine extends WeaponBase {
   }
 }
 
-export class WeaponEnemyMineSecondary extends WeaponBase {
+export class WeaponEnemyMinePlayerProjectile extends WeaponBase {
   projectileClass = PlayerProjectile;
   cooldownTime = 1;
 

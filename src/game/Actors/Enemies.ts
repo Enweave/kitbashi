@@ -1,14 +1,15 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
 import { DAMAGE_BASE, SPEED_BASE, VIEWPORT_WIDTH } from '../Constants.ts';
-import { audioBalanceFromScreenPosition, Vector2 } from '../Utils.ts';
+import { audioBalanceFromScreenPosition, Timer, Vector2 } from '../Utils.ts';
 import { Sprite } from './Base/Sprite.ts';
 import { SFXSetType } from '../SoundController.ts';
 import { BodyOptions, System } from 'detect-collisions';
 import {
+  WeaponBase,
   WeaponEnemyBomber,
   WeaponEnemyMachineGun,
   WeaponEnemyMine,
-  WeaponEnemyMineSecondary,
+  WeaponEnemyMinePlayerProjectile,
   WeaponEnemyShooter,
   WeaponEnemySniper,
 } from './Weapons.ts';
@@ -211,7 +212,7 @@ export class EnemyMine extends EnemyBase {
   maxSpeed: number = SPEED_BASE * 0.2;
   sprite = new Sprite(['enemy-mine']);
   weapon: WeaponEnemyMine;
-  weaponsSecondary: WeaponEnemyMineSecondary;
+  weaponsSecondary: WeaponEnemyMinePlayerProjectile;
   scoreCost = 500;
   exploded: boolean = false;
 
@@ -219,7 +220,7 @@ export class EnemyMine extends EnemyBase {
     super(useSineWave);
     this.weapon = new WeaponEnemyMine(this);
     this.weapon.postInit();
-    this.weaponsSecondary = new WeaponEnemyMineSecondary(this);
+    this.weaponsSecondary = new WeaponEnemyMinePlayerProjectile(this);
     this.weaponsSecondary.postInit();
   }
 
@@ -283,14 +284,35 @@ export class EnemyBoss extends EnemyBase {
   maxSpeed: number = SPEED_BASE * 0.5;
   radius: number = 77;
   sprite = new Sprite(['boss']);
-  weapon: WeaponEnemyMachineGun;
+  weapon: WeaponBase;
+  weapons: WeaponBase[] = [];
   scoreCost = 200;
-  movementPattern: MovementPattern = new MovementPatternSineWave(2000, 1, 0);
+
+  canFire: boolean = true;
+  waitTime: number = 2000;
+  fireTime: number = 4000;
+  timer: Timer;
+
+  SWITCH_PATTERN_X = VIEWPORT_WIDTH - this.radius * 1.1;
 
   constructor(useSineWave: boolean = false) {
     super(useSineWave);
-    this.weapon = new WeaponEnemyMachineGun(this);
-    this.weapon.postInit();
+    const weaponMine = new WeaponEnemyMine(this);
+    weaponMine.cooldownTime = 500;
+
+    this.weapons.push(new WeaponEnemySniper(this));
+    this.weapons.push(weaponMine);
+    this.weapons.push(new WeaponEnemyMachineGun(this));
+
+    this.weapon = this.weapons[0];
+
+    for (const weapon of this.weapons) {
+      weapon.postInit();
+    }
+
+    this.timer = new Timer(this.waitTime, () => {
+      this.canFire = !this.canFire;
+    });
   }
 
   createBody(system: System, position: Vector2) {
@@ -301,21 +323,54 @@ export class EnemyBoss extends EnemyBase {
     this._body = system.createCircle(position, this.radius, bodyOptions);
   }
 
-  afterAttach() {
-    super.afterAttach();
-    // if (this.flowController) {
-    //     this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(0, 0), 15);
-    // }
-  }
-
   death(_: Actor | null = null) {
     super.death(_);
     this.flowController?.winGame();
   }
 
+  _switchPattern() {
+    if (this._body.pos.x < this.SWITCH_PATTERN_X) {
+      if (this.flowController) {
+        this.movementPattern = new MovementPatternTrackPlayerY(
+          this.flowController,
+          this,
+          new Vector2(0, 0),
+          30
+        );
+        this._switchPattern = () => {};
+      }
+    }
+  }
+
+  getNextWeapon(): WeaponBase {
+    let index = this.weapons.indexOf(this.weapon);
+    index = (index + 1) % this.weapons.length;
+    return this.weapons[index];
+  }
+
+  switchWeapons() {
+    if (this.timer.exhausted) {
+      if (this.canFire) {
+        this.timer.duration = this.fireTime;
+        this.timer.reset();
+      } else {
+        this.timer.duration = this.waitTime;
+        this.timer.reset();
+        this.weapon = this.getNextWeapon();
+      }
+    }
+  }
+
   tick(delta: number) {
     super.tick(delta);
-    this.weapon.activate();
+
+    this.timer.tick(delta);
     this.weapon.tick(delta);
+    if (this.canFire) {
+      this.weapon.activate();
+    }
+
+    this._switchPattern();
+    this.switchWeapons();
   }
 }
