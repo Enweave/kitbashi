@@ -50,31 +50,30 @@ onMounted(() => {
     scene,
     new LevelTestWin()
   );
-  scene.addActor(new EnemyBoss(), {
-    x: VIEWPORT_WIDTH - 100,
-    y: 100,
-  } as Vector2);
-  scene.addActor(new EnemySniper(), {
-    x: VIEWPORT_WIDTH - 100,
+  // scene.addActor(new EnemyBoss(), {
+  //   x: VIEWPORT_WIDTH - 100,
+  //   y: 100,
+  // } as Vector2);
+  scene.addActor(new EnemySniper(true), {
+    x: VIEWPORT_WIDTH + 100,
     y: 200,
   } as Vector2);
-  scene.addActor(new EnemyMine(), {
-    x: VIEWPORT_WIDTH - 100,
-    y: 300,
-  } as Vector2);
-  scene.addActor(new EnemyRam(), {
-    x: VIEWPORT_WIDTH - 100,
-    y: 400,
-  } as Vector2);
-  scene.addActor(new EnemyShooter(), {
-    x: VIEWPORT_WIDTH - 100,
-    y: 500,
-  } as Vector2);
-  scene.addActor(new EnemyBomber(), {
+  // scene.addActor(new EnemyMine(), {
+  //   x: VIEWPORT_WIDTH - 100,
+  //   y: 300,
+  // } as Vector2);
+  // scene.addActor(new EnemyRam(), {
+  //   x: VIEWPORT_WIDTH - 100,
+  //   y: 400,
+  // } as Vector2);
+  scene.addActor(new EnemyShooter(true), {
     x: VIEWPORT_WIDTH - 100,
     y: 500,
   } as Vector2);
-  // scene.addActor(new EnemyMine(), {x: VIEWPORT_WIDTH, y: 100} as Vector2);
+  // scene.addActor(new EnemyBomber(), {
+  //   x: VIEWPORT_WIDTH - 100,
+  //   y: 500,
+  // } as Vector2);
 
   mainLoop.addTask(scene);
   mainLoop.addTask(levelSequencer);

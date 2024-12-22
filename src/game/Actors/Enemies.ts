@@ -1,5 +1,5 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
-import { DAMAGE_BASE, SPEED_BASE } from '../Constants.ts';
+import { DAMAGE_BASE, SPEED_BASE, VIEWPORT_WIDTH } from '../Constants.ts';
 import { audioBalanceFromScreenPosition, Vector2 } from '../Utils.ts';
 import { Sprite } from './Base/Sprite.ts';
 import { SFXSetType } from '../SoundController.ts';
@@ -99,6 +99,13 @@ export class EnemyBase extends Actor {
   entityType: EntityType = EntityType.Enemy;
   movementPattern: MovementPattern = new MovementPatternStraightLine();
 
+  constructor(useSineWave: boolean = false) {
+    super();
+    if (useSineWave) {
+      this.movementPattern = new MovementPatternSineWave(2000, 1, -1);
+    }
+  }
+
   createBody(system: System, position: Vector2) {
     const bodyOptions: BodyOptions = {
       userData: this,
@@ -152,8 +159,8 @@ export class EnemyShooter extends EnemyBase {
   weapon: WeaponEnemyShooter;
   scoreCost = 200;
 
-  constructor() {
-    super();
+  constructor(useSineWave: boolean = false) {
+    super(useSineWave);
     this.weapon = new WeaponEnemyShooter(this);
     this.weapon.postInit();
   }
@@ -172,8 +179,8 @@ export class EnemyBomber extends EnemyBase {
   weapon: WeaponEnemyBomber;
   scoreCost = 400;
 
-  constructor() {
-    super();
+  constructor(useSineWave: boolean = false) {
+    super(useSineWave);
     this.weapon = new WeaponEnemyBomber(this);
     this.weapon.postInit();
   }
@@ -208,8 +215,8 @@ export class EnemyMine extends EnemyBase {
   scoreCost = 500;
   exploded: boolean = false;
 
-  constructor() {
-    super();
+  constructor(useSineWave: boolean = false) {
+    super(useSineWave);
     this.weapon = new WeaponEnemyMine(this);
     this.weapon.postInit();
     this.weaponsSecondary = new WeaponEnemyMineSecondary(this);
@@ -241,21 +248,25 @@ export class EnemySniper extends EnemyBase {
   weapon: WeaponEnemySniper;
   scoreCost = 200;
 
-  constructor() {
-    super();
+  SWITCH_PATTERN_X = VIEWPORT_WIDTH * 0.8;
+
+  constructor(useSineWave: boolean = false) {
+    super(useSineWave);
     this.weapon = new WeaponEnemySniper(this);
     this.weapon.postInit();
   }
 
-  afterAttach() {
-    super.afterAttach();
-    if (this.flowController) {
-      this.movementPattern = new MovementPatternTrackPlayerY(
-        this.flowController,
-        this,
-        new Vector2(0, 0),
-        15
-      );
+  _switchPattern() {
+    if (this._body.pos.x < this.SWITCH_PATTERN_X) {
+      if (this.flowController) {
+        this.movementPattern = new MovementPatternTrackPlayerY(
+          this.flowController,
+          this,
+          new Vector2(0, 0),
+          30
+        );
+        this._switchPattern = () => {};
+      }
     }
   }
 
@@ -263,6 +274,7 @@ export class EnemySniper extends EnemyBase {
     super.tick(delta);
     this.weapon.activate();
     this.weapon.tick(delta);
+    this._switchPattern();
   }
 }
 
@@ -275,8 +287,8 @@ export class EnemyBoss extends EnemyBase {
   scoreCost = 200;
   movementPattern: MovementPattern = new MovementPatternSineWave(2000, 1, 0);
 
-  constructor() {
-    super();
+  constructor(useSineWave: boolean = false) {
+    super(useSineWave);
     this.weapon = new WeaponEnemyMachineGun(this);
     this.weapon.postInit();
   }
