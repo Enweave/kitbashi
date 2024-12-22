@@ -4,7 +4,13 @@ import {audioBalanceFromScreenPosition, Vector2} from "../Utils.ts";
 import {Sprite} from "./Base/Sprite.ts";
 import {SFXSetType} from "../SoundController.ts";
 import {BodyOptions, System} from "detect-collisions";
-import {WeaponEnemyBomber, WeaponEnemyMine, WeaponEnemyMineSecondary, WeaponEnemyShooter} from "./Weapons.ts";
+import {
+    WeaponEnemyBomber, WeaponEnemyMachineGun,
+    WeaponEnemyMine,
+    WeaponEnemyMineSecondary,
+    WeaponEnemyShooter,
+    WeaponEnemySniper
+} from "./Weapons.ts";
 import {FlowController} from "../FlowController.ts";
 
 
@@ -40,7 +46,10 @@ class MovementPatternSineWave extends MovementPattern {
 
     getDirection(delta: number): Vector2 {
         this._accumulatedDelta += delta;
-        const direction = new Vector2(this.xMultiplier, Math.sin(this.deltaToRadians(this._accumulatedDelta)) * this.sineAmplitude);
+        const direction = new Vector2(
+            this.xMultiplier,
+            Math.sin(this.deltaToRadians(this._accumulatedDelta)) * this.sineAmplitude
+        );
         if (this._accumulatedDelta > this.sinePeriod) {
             this._accumulatedDelta = 0;
         }
@@ -174,12 +183,6 @@ export class EnemyShooter extends EnemyBase {
         this.weapon = new WeaponEnemyShooter(this);
         this.weapon.postInit();
     }
-    // afterAttach() {
-    //     super.afterAttach();
-    //     if (this.flowController) {
-    //         this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(-1, 0), 5);
-    //     }
-    // }
 
     tick(delta: number) {
         super.tick(delta);
@@ -223,7 +226,7 @@ export class EnemyBomber extends EnemyBase {
 }
 
 export class EnemyMine extends EnemyBase {
-    maxHealth = DAMAGE_BASE * 1;
+    maxHealth = DAMAGE_BASE * 4;
     maxSpeed: number = SPEED_BASE * 0.2;
     sprite = new Sprite(['enemy-mine']);
     weapon: WeaponEnemyMine;
@@ -258,6 +261,96 @@ export class EnemyMine extends EnemyBase {
             this.weaponsSecondary.activate();
         }
         super.death(_);
+    }
+}
 
+export class EnemySniper extends EnemyBase {
+    maxHealth = DAMAGE_BASE * 2;
+    maxSpeed: number = SPEED_BASE * 0.5;
+    radius: number = 100;
+    sprite = new Sprite(['enemy-sniper']);
+    weapon: WeaponEnemySniper;
+    scoreCost = 200;
+
+    constructor() {
+        super();
+        this.weapon = new WeaponEnemySniper(this);
+        this.weapon.postInit();
+    }
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createBox(
+            position,
+            this.radius * 2,
+            this.radius * 2,
+            bodyOptions
+        );
+        this._body.setOffset({x:-this.radius, y:-this.radius} as SAT.Vector);
+    }
+
+    afterAttach() {
+        super.afterAttach();
+        if (this.flowController) {
+            this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(0, 0), 15);
+        }
+    }
+
+
+    tick(delta: number) {
+        super.tick(delta);
+        this.weapon.activate();
+        this.weapon.tick(delta);
+    }
+}
+
+
+
+export class EnemyBoss extends EnemyBase {
+    maxHealth = DAMAGE_BASE * 2;
+    maxSpeed: number = SPEED_BASE * 0.5;
+    radius: number = 100;
+    sprite = new Sprite(['boss']);
+    weapon: WeaponEnemyMachineGun;
+    scoreCost = 200;
+    movementPattern: MovementPattern = new MovementPatternSineWave(2000, 1, 0);
+
+    constructor() {
+        super();
+        this.weapon = new WeaponEnemyMachineGun(this);
+        this.weapon.postInit();
+    }
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createCircle(
+            position,
+            this.radius,
+            bodyOptions
+        );
+    }
+
+    afterAttach() {
+        super.afterAttach();
+        // if (this.flowController) {
+        //     this.movementPattern = new MovementPatternTrackPlayerY(this.flowController, this, new Vector2(0, 0), 15);
+        // }
+    }
+
+    death(_: Actor | null = null) {
+        super.death(_);
+        this.flowController?.winGame();
+    }
+
+    tick(delta: number) {
+        super.tick(delta);
+        this.weapon.activate();
+        this.weapon.tick(delta);
     }
 }

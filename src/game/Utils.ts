@@ -21,6 +21,13 @@ export class Vector2 {
             this.y *= factor;
         }
     }
+
+    getNormalizedDirectionTo(target: Vector2) {
+        const direction = new Vector2(target.x - this.x, target.y - this.y);
+        direction.clampLength(1);
+        return direction;
+    }
+
 }
 
 export function clamp(value: number, min: number, max: number) {

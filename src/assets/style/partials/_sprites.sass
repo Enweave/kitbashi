@@ -64,8 +64,12 @@
     background: url("/assets/sprites/boss/body0005.png") no-repeat
     background-size: contain
 
+$z_index_sprite: 10
+$z_index_sprite_projectile: 2
+
 .sprite
   position: absolute
+  z-index: $z_index_sprite
   left: 0
   top: 0
   &.blink
@@ -110,6 +114,7 @@
       background: none
 
   &.projectile
+    z-index: $z_index_sprite_projectile
     &:after
       width: 20px
       height: 20px

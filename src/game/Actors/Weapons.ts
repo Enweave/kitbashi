@@ -23,7 +23,6 @@ class LaunchSlot {
     }
 }
 
-
 export class WeaponBase extends FeatureBase {
     projectileClass = ProjectileBase;
     owner: Actor;
@@ -121,7 +120,6 @@ export class WeaponEnemyMine extends WeaponBase {
         super(owner);
         this.owner = owner;
 
-
         const centerOffsetLength = 35;
         const launchParams: LaunchParams[] = [];
         for (let i = 0; i < 8; i++) {
@@ -159,6 +157,72 @@ export class WeaponEnemyMineSecondary extends WeaponBase {
 
         this.launchSlots = [
             new LaunchSlot(launchParams),
+        ];
+    }
+}
+
+export class WeaponEnemySniper extends WeaponBase {
+    projectileClass = EnemyProjectile;
+    cooldownTime = 700;
+    spreadDistance = 30;
+
+    constructor(owner: Actor) {
+        super(owner);
+        this.owner = owner;
+        this.launchSlots = [
+            new LaunchSlot([
+                new LaunchParams(
+                    new Vector2(0, 0),
+                    new Vector2(-1, 0)),
+            ]),
+        ];
+    }
+
+    getCurrentLaunchParams(): LaunchParams[] {
+        const params = super.getCurrentLaunchParams();
+        const player = this.owner.flowController?.getPlayerActor();
+        if (player) {
+            const playerPos = new Vector2(
+                player._body.pos.x + Math.random() * this.spreadDistance - this.spreadDistance / 2,
+                player._body.pos.y + Math.random() * this.spreadDistance - this.spreadDistance / 2
+            );
+            const ownerPos = new Vector2(this.owner._body.pos.x, this.owner._body.pos.y);
+            const normalizedDirection = ownerPos.getNormalizedDirectionTo(playerPos);
+            const direction = new Vector2(normalizedDirection.x, normalizedDirection.y);
+            for (let i = 0; i < params.length; i++) {
+                params[i].direction = direction;
+            }
+        }
+
+        return params;
+    }
+
+}
+
+export class WeaponEnemyMachineGun extends WeaponBase {
+    projectileClass = EnemyProjectile;
+    cooldownTime = 200;
+    spreadFactor = 0.3;
+
+    getCurrentLaunchParams(): LaunchParams[] {
+        const params = super.getCurrentLaunchParams();
+
+        for (let i = 0; i < params.length; i++) {
+            params[i].direction.y = Math.random() * this.spreadFactor - this.spreadFactor / 2;
+        }
+
+        return params;
+    }
+
+    constructor(owner: Actor) {
+        super(owner);
+        this.owner = owner;
+        this.launchSlots = [
+            new LaunchSlot([
+                new LaunchParams(
+                    new Vector2(0, 0),
+                    new Vector2(-1, 0)),
+            ]),
         ];
     }
 }
