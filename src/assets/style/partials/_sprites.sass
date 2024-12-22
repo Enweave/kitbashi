@@ -31,6 +31,23 @@
   100%
     transform: translate(-50%, -50%)
 
+@keyframes player
+  0%
+    background: url("/assets/sprites/player/body0001.png") no-repeat
+    background-size: contain
+  20%
+    background: url("/assets/sprites/player/body0002.png") no-repeat
+    background-size: contain
+  40%
+    background: url("/assets/sprites/player/body0003.png") no-repeat
+    background-size: contain
+  60%
+    background: url("/assets/sprites/player/body0004.png") no-repeat
+    background-size: contain
+  80%
+    background: url("/assets/sprites/player/body0005.png") no-repeat
+    background-size: contain
+
 
 
 .sprite
@@ -49,6 +66,21 @@
     background: variables.$color_b_light
     width: 60px
     height: 60px
+
+  &.player
+    &:before
+      background: url("/assets/sprites/player/body0001.png") no-repeat
+      background-size: contain
+      animation: player 0.2s steps(5) infinite
+      transition: transform 0.2s
+    &.lean-up
+      &:before
+        transform: translate(-50%, -50%) rotate(-15deg)
+    &.lean-down
+      &:before
+        transform: translate(-50%, -50%) rotate(15deg)
+    &:after
+      background: none
 
   &.projectile
     &:after
@@ -69,7 +101,6 @@
       background: variables.$color_a_light
     &:before
       background: none
-  //&.enemy-ram:after, &.enemy-shooter:after
 
   &.enemy-ram
     &:before
@@ -89,9 +120,3 @@
     &:after
       background: url("/assets/sprites/shooter/body.png") no-repeat
       background-size: contain
-
-  //&.enemy-shooter
-  //  &:after
-  //    border: 1px solid variables.$color_b_light
-  //    background: variables.$color_a_dark
-

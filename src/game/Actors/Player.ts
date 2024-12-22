@@ -3,12 +3,14 @@ import {InputController} from "../InputController.ts";
 import {Timer, Vector2} from "../Utils.ts";
 import {ASPECT_RATIO, IVULNERABILITY_DURATION_MS, VIEWPORT_WIDTH} from "../Constants.ts";
 import {WeaponBase, WeaponPlayer} from "./Weapons.ts";
+import {Sprite} from "./Base/Sprite.ts";
+import {BodyOptions, System} from "detect-collisions";
 
 
 export class Player extends Actor {
     input: InputController;
     entityType = EntityType.Player;
-
+    sprite = new Sprite(['player']);
     LEFT_BOUND = this.radius;
     RIGHT_BOUND = VIEWPORT_WIDTH-this.radius;
     TOP_BOUND = this.radius;
@@ -25,6 +27,20 @@ export class Player extends Actor {
         this.mainWeapon.postInit();
         this.spawnPosition = Player.initialSpawnPosition;
         this.flowController?.setPlayerActor(this);
+    }
+
+    createBody(system: System, position: Vector2) {
+        const bodyOptions: BodyOptions = {
+            userData: this,
+        };
+
+        this._body = system.createBox(
+            position,
+            this.radius * 2,
+            this.radius * 1.1,
+            bodyOptions
+        );
+        this._body.setOffset({x:-this.radius, y:-this.radius*0.6} as SAT.Vector);
     }
 
     keepInBounds() {
@@ -46,6 +62,19 @@ export class Player extends Actor {
         }
     }
 
+    verticalVelocityToSpriteLean() {
+        if (this.controllerDirection.y < 0) {
+            this.sprite.htmlElement.classList.add('lean-up');
+            this.sprite.htmlElement.classList.remove('lean-down');
+        } else if (this.controllerDirection.y > 0) {
+            this.sprite.htmlElement.classList.add('lean-down');
+            this.sprite.htmlElement.classList.remove('lean-up');
+        } else {
+            this.sprite.htmlElement.classList.remove('lean-up');
+            this.sprite.htmlElement.classList.remove('lean-down');
+        }
+    }
+
     tick(delta: number) {
         this.controllerDirection = this.input.getDirection() as Vector2;
         if (this.input.isFiring()) {
@@ -54,6 +83,7 @@ export class Player extends Actor {
         this.mainWeapon.tick(delta);
         this.keepInBounds();
         super.tick(delta);
+        this.verticalVelocityToSpriteLean();
     }
 
     death(_: Actor | null = null) {
