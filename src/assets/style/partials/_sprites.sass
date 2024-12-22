@@ -40,13 +40,13 @@
     border: 1px solid variables.$color_a_dark
     background: variables.$color_a_light
 
-  &.enemy-ram:after
-    border: 1px solid variables.$color_b_light
-    background: variables.$color_a_dark
+  &.enemy-ram:after, &.enemy-shooter:after
+    background: url("/assets/sprites/enemy.png") no-repeat
+    background-size: contain
 
-  &.enemy-shooter
-    &:after
-      border: 1px solid variables.$color_b_light
-      background: variables.$color_a_dark
-      transform: translate(-50%, -50%) rotate(-45deg)
+
+  //&.enemy-shooter
+  //  &:after
+  //    border: 1px solid variables.$color_b_light
+  //    background: variables.$color_a_dark
 
