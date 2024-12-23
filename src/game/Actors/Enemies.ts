@@ -142,7 +142,7 @@ export class EnemyBase extends Actor {
   death(_: Actor | null = null) {
     super.death(_);
     if (_?.entityType === EntityType.PlayerProjectile) {
-      this.flowController?.addScore(this.scoreCost);
+      this.flowController?.addScore(SCORE_BASE * this.maxHealth);
       this.flowController?.soundController?.playSFX(
         SFXSetType.explosion,
         audioBalanceFromScreenPosition(this._body.pos.x),

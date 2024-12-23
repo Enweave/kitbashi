@@ -5,6 +5,7 @@ import {
 } from '../LevelSequencer.ts';
 import { FlowController } from '../FlowController.ts';
 import { enemyTypes } from '../Actors/Enemies.ts';
+import {clamp} from "../Utils.ts";
 
 
 
@@ -30,7 +31,7 @@ export class LevelOne extends LevelEventSequence {
           Math.floor(Math.random() * 5) + 1,
           true,
           [this.getRandomEnemyType()],
-          Math.floor(Math.random() * i) + 1
+          clamp(Math.floor(Math.random() * i) + 1, 1, 5)
         )
       );
     }

@@ -16,7 +16,7 @@ export const ENEMY_HP_MULTIPLIER = {
   ram: 2,
   bomber: 3,
   shooter: 3,
-  sniper: 4,
+  sniper: 1,
   mine: 2,
   boss: 50,
 };
