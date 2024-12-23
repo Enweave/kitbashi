@@ -1,7 +1,9 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
 import {
   ASPECT_RATIO,
-  DAMAGE_BASE, ENEMY_HP_MULTIPLIER, SCORE_BASE,
+  DAMAGE_BASE,
+  ENEMY_HP_MULTIPLIER,
+  SCORE_BASE,
   SPEED_BASE,
   VIEWPORT_WIDTH,
 } from '../Constants.ts';

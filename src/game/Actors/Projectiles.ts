@@ -1,6 +1,10 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
 import { Vector2 } from '../Utils.ts';
-import {DAMAGE_BASE, MINE_DAMAGE_MULTIPLIER, PROJECTILE_SPEED} from '../Constants.ts';
+import {
+  DAMAGE_BASE,
+  MINE_DAMAGE_MULTIPLIER,
+  PROJECTILE_SPEED,
+} from '../Constants.ts';
 import { Sprite } from './Base/Sprite.ts';
 
 export class ProjectileBase extends Actor {

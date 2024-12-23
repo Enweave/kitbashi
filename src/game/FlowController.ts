@@ -1,9 +1,13 @@
 import { Ref, ref, watch } from 'vue';
-import {clamp, Vector2} from './Utils.ts';
+import { clamp, Vector2 } from './Utils.ts';
 import { Actor } from './Actors/Base/ActorsBase.ts';
 import { SoundController } from './SoundController.ts';
-import {EXTRA_LIFE_COST, MAX_UPGRADE_INDEX, UPGRADE_COST} from "./Constants.ts";
-import {Player} from "./Actors/Player.ts";
+import {
+  EXTRA_LIFE_COST,
+  MAX_UPGRADE_INDEX,
+  UPGRADE_COST,
+} from './Constants.ts';
+import { Player } from './Actors/Player.ts';
 
 export const enum Screen {
   MainMenu,
@@ -98,7 +102,11 @@ export class FlowController {
         el.style.animation = 'camera-shake 0.8s';
       });
     }
-    const weaponGrade = clamp(this.playerState.weaponGrade.value - 1, 0, MAX_UPGRADE_INDEX)
+    const weaponGrade = clamp(
+      this.playerState.weaponGrade.value - 1,
+      0,
+      MAX_UPGRADE_INDEX
+    );
     this.playerState.weaponGrade.value = weaponGrade;
     this.getPlayerActor()?.setWeaponGrade(weaponGrade);
   }
@@ -116,17 +124,25 @@ export class FlowController {
     this.playerState._extraLifeBudget += score;
 
     if (this.playerState._upgradeScoreBudget >= UPGRADE_COST) {
-
-      const numUpgrades = Math.floor(this.playerState._upgradeScoreBudget / UPGRADE_COST);
-      if (this.playerState.weaponGrade.value + numUpgrades < MAX_UPGRADE_INDEX) {
+      const numUpgrades = Math.floor(
+        this.playerState._upgradeScoreBudget / UPGRADE_COST
+      );
+      if (
+        this.playerState.weaponGrade.value + numUpgrades <
+        MAX_UPGRADE_INDEX
+      ) {
         this.playerState.weaponGrade.value += numUpgrades;
         this.playerState._upgradeScoreBudget -= UPGRADE_COST;
-        this.getPlayerActor()?.setWeaponGrade(this.playerState.weaponGrade.value);
+        this.getPlayerActor()?.setWeaponGrade(
+          this.playerState.weaponGrade.value
+        );
       }
     }
 
     if (this.playerState._extraLifeBudget >= EXTRA_LIFE_COST) {
-      const numExtraLives = Math.floor(this.playerState._extraLifeBudget / EXTRA_LIFE_COST);
+      const numExtraLives = Math.floor(
+        this.playerState._extraLifeBudget / EXTRA_LIFE_COST
+      );
       this.playerState.lives.value += numExtraLives;
       this.playerState._extraLifeBudget -= EXTRA_LIFE_COST;
     }

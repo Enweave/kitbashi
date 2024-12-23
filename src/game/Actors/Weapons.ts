@@ -1,7 +1,8 @@
 import { FeatureBase } from './Base/Feature.ts';
 import {
   EnemyProjectile,
-  PlayerProjectile, PlayerProjectileMine,
+  PlayerProjectile,
+  PlayerProjectileMine,
   ProjectileBase,
 } from './Projectiles.ts';
 import { Actor } from './Base/ActorsBase.ts';

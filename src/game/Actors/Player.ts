@@ -3,7 +3,7 @@ import { InputController } from '../InputController.ts';
 import { Timer, Vector2 } from '../Utils.ts';
 import {
   ASPECT_RATIO,
-  IVULNERABILITY_DURATION_MS,
+  INVULNERABILITY_DURATION_MS,
   VIEWPORT_WIDTH,
 } from '../Constants.ts';
 import { WeaponBase, WeaponPlayer } from './Weapons.ts';
@@ -119,7 +119,7 @@ export class Player extends Actor {
       this.flowController.playerState.lives.value -= 1;
     }
     this.timers.push(
-      new Timer(IVULNERABILITY_DURATION_MS, () => {
+      new Timer(INVULNERABILITY_DURATION_MS, () => {
         this.reanimate();
         this._isInvulnerable = false;
         this.sprite.htmlElement.classList.remove('blink');
