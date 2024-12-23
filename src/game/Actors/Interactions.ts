@@ -1,8 +1,8 @@
 import { Response } from 'detect-collisions';
 
 import { Actor, EntityType } from './Base/ActorsBase.ts';
-import {SFXSetType} from "../SoundController.ts";
-import {audioBalanceFromScreenPosition} from "../Utils.ts";
+import { SFXSetType } from '../SoundController.ts';
+import { audioBalanceFromScreenPosition } from '../Utils.ts';
 
 export class ActorInteractions {
   static dispatchCollision(response: Response) {
@@ -26,9 +26,9 @@ export class ActorInteractions {
       actor2.damage(actor1.contactDamage, actor1);
       actor1.death();
       actor2.flowController?.soundController?.playSFX(
-          SFXSetType.hit,
-          audioBalanceFromScreenPosition(actor2._body.pos.x),
-          1
+        SFXSetType.hit,
+        audioBalanceFromScreenPosition(actor2._body.pos.x),
+        1
       );
     }
   }
