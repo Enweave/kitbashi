@@ -8,17 +8,7 @@ import { InputController } from '../game/InputController.ts';
 import { Scene } from '../game/SceneController.ts';
 import { Player } from '../game/Actors/Player.ts';
 import { LevelSequencer } from '../game/LevelSequencer.ts';
-import { LevelTestWin } from '../game/Levels/LevelTestWin.ts';
-import { Vector2 } from '../game/Utils.ts';
-import { VIEWPORT_WIDTH } from '../game/Constants.ts';
-import {
-  // EnemyBomber,
-  EnemyBoss,
-  // EnemyMine,
-  // EnemyRam,
-  // EnemyShooter,
-  // EnemySniper,
-} from '../game/Actors/Enemies.ts';
+import { LevelOne } from '../game/Levels/LevelOne.ts';
 
 const props = defineProps<{
   flowController: FlowController;
@@ -47,32 +37,8 @@ onMounted(() => {
   levelSequencer = new LevelSequencer(
     props.flowController,
     scene,
-    new LevelTestWin()
+    new LevelOne(props.flowController)
   );
-  scene.addActor(new EnemyBoss(), {
-    x: VIEWPORT_WIDTH + 100,
-    y: 100,
-  } as Vector2);
-  // scene.addActor(new EnemySniper(true), {
-  //   x: VIEWPORT_WIDTH + 100,
-  //   y: 200,
-  // } as Vector2);
-  // scene.addActor(new EnemyMine(), {
-  //   x: VIEWPORT_WIDTH - 100,
-  //   y: 300,
-  // } as Vector2);
-  // scene.addActor(new EnemyRam(), {
-  //   x: VIEWPORT_WIDTH - 100,
-  //   y: 400,
-  // } as Vector2);
-  // scene.addActor(new EnemyShooter(true), {
-  //   x: VIEWPORT_WIDTH - 100,
-  //   y: 500,
-  // } as Vector2);
-  // scene.addActor(new EnemyBomber(), {
-  //   x: VIEWPORT_WIDTH - 100,
-  //   y: 500,
-  // } as Vector2);
 
   mainLoop.addTask(scene);
   mainLoop.addTask(levelSequencer);

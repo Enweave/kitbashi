@@ -1,6 +1,16 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
-import { DAMAGE_BASE, SPEED_BASE, VIEWPORT_WIDTH } from '../Constants.ts';
-import { audioBalanceFromScreenPosition, Timer, Vector2 } from '../Utils.ts';
+import {
+  ASPECT_RATIO,
+  DAMAGE_BASE,
+  SPEED_BASE,
+  VIEWPORT_WIDTH,
+} from '../Constants.ts';
+import {
+  audioBalanceFromScreenPosition,
+  clamp,
+  Timer,
+  Vector2,
+} from '../Utils.ts';
 import { Sprite } from './Base/Sprite.ts';
 import { SFXSetType } from '../SoundController.ts';
 import { BodyOptions, System } from 'detect-collisions';
@@ -380,5 +390,85 @@ export class EnemyBoss extends EnemyBase {
 
     this._switchPattern();
     this.switchWeapons();
+  }
+}
+
+export enum enemyTypes {
+  ram,
+  shooter,
+  bomber,
+  mine,
+  sniper,
+  boss,
+}
+
+export class EnemySpawner {
+  static randomLength(length: number): number {
+    const min = length * 0.1;
+    const max = length * 0.9;
+    return clamp(Math.floor(Math.random() * length), min, max);
+  }
+
+  static randomViewportWidthWithOffset(): number {
+    return VIEWPORT_WIDTH * (1 + clamp(Math.random(), 0.1, 0.5));
+  }
+
+  static spawnPositionFromType(enemyType: enemyTypes): Vector2 {
+    const VIEWPORT_HEIGHT = VIEWPORT_WIDTH / ASPECT_RATIO;
+
+    if (enemyType === enemyTypes.bomber) {
+      return new Vector2(
+        EnemySpawner.randomViewportWidthWithOffset(),
+        VIEWPORT_HEIGHT * 0.1
+      );
+    } else {
+      return new Vector2(
+        EnemySpawner.randomViewportWidthWithOffset(),
+        EnemySpawner.randomLength(VIEWPORT_HEIGHT)
+      );
+    }
+  }
+
+  static randomBool(): boolean {
+    return Math.random() > 0.5;
+  }
+
+  static spawnEnemy(
+    enemyType: enemyTypes,
+    amount: number = 1,
+    flowController: FlowController
+  ): void {
+    for (let i = 0; i < amount; i++) {
+      let enemy: Actor;
+
+      // oh come on!
+      switch (enemyType) {
+        case enemyTypes.ram:
+          enemy = new EnemyRam(this.randomBool());
+          break;
+        case enemyTypes.shooter:
+          enemy = new EnemyShooter(this.randomBool());
+          break;
+        case enemyTypes.bomber:
+          enemy = new EnemyBomber();
+          break;
+        case enemyTypes.mine:
+          enemy = new EnemyMine(this.randomBool());
+          break;
+        case enemyTypes.sniper:
+          enemy = new EnemySniper(this.randomBool());
+          break;
+        case enemyTypes.boss:
+          enemy = new EnemyBoss(this.randomBool());
+          break;
+        default:
+          enemy = new EnemyRam(this.randomBool());
+          break;
+      }
+
+      enemy.spawnPosition = EnemySpawner.spawnPositionFromType(enemyType);
+
+      flowController._spawnActorQueue.push(enemy);
+    }
   }
 }

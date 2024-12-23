@@ -1,6 +1,7 @@
 import { Task } from './MainLoop.ts';
 import { FlowController } from './FlowController.ts';
 import { Scene } from './SceneController.ts';
+import { EnemySpawner, enemyTypes } from './Actors/Enemies.ts';
 
 export class LevelEventBase implements Task {
   duration: number = 0;
@@ -78,5 +79,22 @@ export class LevelSequencer implements Task {
     if (this._currentEvent?.finished) {
       this._advanceLevel();
     }
+  }
+
+  static createEvent(
+    flowController: FlowController,
+    durationSeconds: number,
+    autoFinish: boolean = true,
+    enemyTypes: enemyTypes[],
+    amount: number = 1
+  ): LevelEventBase {
+    const event = new LevelEventBase(durationSeconds * 1000, autoFinish);
+    event.beginEvent = () => {
+      console.log('Event started :' + enemyTypes, amount);
+      for (let i = 0; i < enemyTypes.length; i++) {
+        EnemySpawner.spawnEnemy(enemyTypes[i], amount, flowController);
+      }
+    };
+    return event;
   }
 }
