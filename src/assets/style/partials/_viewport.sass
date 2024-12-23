@@ -1,9 +1,21 @@
 @use "variables"
 
+@keyframes move-background
+  0%
+    background-position: 0% bottom
+  100%
+    background-position: -640px bottom
+
 .viewport
   overflow: hidden
   position: relative
   transform-origin: 0 0
+  background: url("/assets/backgrounds/dither_it_4.png")
+  background-repeat: repeat no-repeat
+  background-size: contain
+  background-position: 0% bottom
+  animation: move-background 4s linear infinite
+
 
 .debug-canvas
   position: absolute
