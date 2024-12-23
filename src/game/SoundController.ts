@@ -152,6 +152,7 @@ export class SoundController {
   sfxPlayers: Ref<SFXPlayer[]> = ref([]);
   musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null);
   musicBlobURL: string = '';
+  musicStarted: boolean = false;
   MAX_SFX_PLAYERS: number = 30;
 
   constructor(musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null)) {
@@ -165,7 +166,8 @@ export class SoundController {
   }
 
   _playMusic() {
-    if (this.musicPlayer.value) {
+    if (this.musicPlayer.value && !this.musicStarted) {
+      this.musicStarted = true;
       this.musicPlayer.value.src = this.musicBlobURL;
       this.musicPlayer.value.volume = this.musicLevel;
       this.musicPlayer.value.loop = true;

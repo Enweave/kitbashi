@@ -17,7 +17,7 @@ onMounted(() => {
 
 <template>
   <div class="menu-container" ref="menuRef">
-    <h1>Here be main menu</h1>
+    <h1>Kitbashi!</h1>
     <button @click="props.flowController.startGame()">Start Game</button>
     <sound-level-slider
       title="SFX"
