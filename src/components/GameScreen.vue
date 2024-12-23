@@ -12,12 +12,12 @@ import { LevelTestWin } from '../game/Levels/LevelTestWin.ts';
 import { Vector2 } from '../game/Utils.ts';
 import { VIEWPORT_WIDTH } from '../game/Constants.ts';
 import {
-  EnemyBomber,
+  // EnemyBomber,
   EnemyBoss,
-  EnemyMine,
-  EnemyRam,
-  EnemyShooter,
-  EnemySniper,
+  // EnemyMine,
+  // EnemyRam,
+  // EnemyShooter,
+  // EnemySniper,
 } from '../game/Actors/Enemies.ts';
 
 const props = defineProps<{
@@ -32,7 +32,6 @@ let scene: Scene;
 let levelSequencer: LevelSequencer;
 
 onMounted(() => {
-  console.log('GameScreen mounted');
   mainLoop = new MainLoop(props.flowController);
   scene = new Scene(
     props.flowController,
@@ -50,14 +49,14 @@ onMounted(() => {
     scene,
     new LevelTestWin()
   );
-  // scene.addActor(new EnemyBoss(), {
-  //   x: VIEWPORT_WIDTH - 100,
-  //   y: 100,
-  // } as Vector2);
-  scene.addActor(new EnemySniper(true), {
+  scene.addActor(new EnemyBoss(), {
     x: VIEWPORT_WIDTH + 100,
-    y: 200,
+    y: 100,
   } as Vector2);
+  // scene.addActor(new EnemySniper(true), {
+  //   x: VIEWPORT_WIDTH + 100,
+  //   y: 200,
+  // } as Vector2);
   // scene.addActor(new EnemyMine(), {
   //   x: VIEWPORT_WIDTH - 100,
   //   y: 300,
@@ -66,10 +65,10 @@ onMounted(() => {
   //   x: VIEWPORT_WIDTH - 100,
   //   y: 400,
   // } as Vector2);
-  scene.addActor(new EnemyShooter(true), {
-    x: VIEWPORT_WIDTH - 100,
-    y: 500,
-  } as Vector2);
+  // scene.addActor(new EnemyShooter(true), {
+  //   x: VIEWPORT_WIDTH - 100,
+  //   y: 500,
+  // } as Vector2);
   // scene.addActor(new EnemyBomber(), {
   //   x: VIEWPORT_WIDTH - 100,
   //   y: 500,

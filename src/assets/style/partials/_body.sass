@@ -1,5 +1,24 @@
 @use "variables"
 
+$shake_pan_strength: 2px
+$shake_roll_strength: 0.5deg
+
+@keyframes camera-shake
+  0%
+    transform: translate(0, 0) rotate(0)
+  10%
+    transform: translate(-#{$shake_pan_strength}, -#{$shake_pan_strength}) rotate(-#{$shake_roll_strength})
+  20%
+    transform: translate(#{$shake_pan_strength}, #{$shake_pan_strength}) rotate(#{$shake_roll_strength})
+  30%
+    transform: translate(-#{$shake_pan_strength}, #{$shake_pan_strength}) rotate(-#{$shake_roll_strength})
+  40%
+    transform: translate(#{$shake_pan_strength}, -#{$shake_pan_strength}) rotate(#{$shake_roll_strength})
+  50%
+    transform: translate(0, 0) rotate(0)
+  100%
+    transform: translate(0, 0) rotate(0)
+
 html, body
   touch-action: none
   background-color: variables.$color_a_dark
@@ -10,6 +29,7 @@ html, body
   color: variables.$color_a_dark
 
 .container
+  overflow: clip
   height: 100vh
   height: 100dvh
   max-width: 1000px

@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { Vector2 } from './Utils.ts';
 import { Actor } from './Actors/Base/ActorsBase.ts';
 import { SoundController } from './SoundController.ts';
@@ -31,6 +31,7 @@ enum StoreKeys {
 
 export class FlowController {
   currentScreen = ref<Screen>(Screen.MainMenu);
+  screenRef: Ref<HTMLElement | null, HTMLElement | null> = ref(null);
   viewportContainerSize = ref<Vector2>(new Vector2(0, 0));
 
   playerState = new PlayerState();
@@ -43,17 +44,16 @@ export class FlowController {
   );
   soundController: SoundController | null = null;
   sfxLevel = ref<number>(
-    JSON.parse(localStorage.getItem(StoreKeys.sfxLevel) || '0.1')
+    JSON.parse(localStorage.getItem(StoreKeys.sfxLevel) || '0.5')
   );
   musicLevel = ref<number>(
-    JSON.parse(localStorage.getItem(StoreKeys.musicLevel) || '1')
+    JSON.parse(localStorage.getItem(StoreKeys.musicLevel) || '0.5')
   );
 
   _spawnActorQueue: Actor[] = [];
 
   constructor(soundController: SoundController) {
     this.soundController = soundController;
-    this.currentScreen = ref(Screen.MainMenu);
     this.paused = ref(false);
 
     this.soundController.setSFXLevel(this.sfxLevel.value);
@@ -73,7 +73,16 @@ export class FlowController {
       this.soundController?.setMusicLevel(newValue);
     });
 
-    watch(this.playerState.lives, (newValue) => {
+    watch(this.playerState.lives, (newValue, oldValue) => {
+      if (newValue < oldValue) {
+        const el = this.screenRef.value;
+        if (el) {
+          el.style.animation = 'none';
+          requestAnimationFrame(function () {
+            el.style.animation = 'camera-shake 0.8s';
+          });
+        }
+      }
       if (newValue <= 0) {
         this.loseGame();
       }
@@ -117,5 +126,9 @@ export class FlowController {
 
   togglePause() {
     this.paused.value = !this.paused.value;
+  }
+
+  setScreenRef(screenRef: Ref<HTMLElement | null, HTMLElement | null>) {
+    this.screenRef = screenRef;
   }
 }

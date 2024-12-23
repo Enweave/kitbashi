@@ -53,6 +53,8 @@ onMounted(() => {
   window.addEventListener('orientationchange', () => {
     resizeScreen();
   });
+
+  flowController.setScreenRef(screenRef);
 });
 </script>
 
@@ -78,7 +80,7 @@ onMounted(() => {
       :sfx-player="player"
     ></s-f-x-player-component>
   </div>
-  <div style="visibility: hidden;">
+  <div style="visibility: hidden">
     <!-- Dirty hack to preload all sprites <-->
     <!-- also, sup, Quinten! -->
     <div class="sprite player"></div>
