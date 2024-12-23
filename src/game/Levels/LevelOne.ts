@@ -5,13 +5,9 @@ import {
 } from '../LevelSequencer.ts';
 import { FlowController } from '../FlowController.ts';
 import { enemyTypes } from '../Actors/Enemies.ts';
-import {clamp} from "../Utils.ts";
-
-
-
+import { clamp } from '../Utils.ts';
 
 export class LevelOne extends LevelEventSequence {
-
   constructor(flowController: FlowController) {
     super();
 
@@ -44,11 +40,15 @@ export class LevelOne extends LevelEventSequence {
     );
   }
 
-  getRandomEnemyType() : enemyTypes {
-    const types = [enemyTypes.ram, enemyTypes.shooter, enemyTypes.sniper, enemyTypes.mine, enemyTypes.bomber];
-
+  getRandomEnemyType(): enemyTypes {
+    const types = [
+      enemyTypes.ram,
+      enemyTypes.shooter,
+      enemyTypes.sniper,
+      enemyTypes.mine,
+      enemyTypes.bomber,
+    ];
 
     return types[Math.floor(Math.random() * types.length)];
   }
-
 }

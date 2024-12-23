@@ -1,4 +1,4 @@
-import {Ref, ref} from 'vue';
+import { Ref, ref } from 'vue';
 import { clamp } from './Utils.ts';
 
 export enum SFXSetType {
@@ -88,30 +88,42 @@ class SFXRegistry {
 
   constructor() {
     this.sfxMap = new Map([
-      [SFXSetType.fire, new SFX([
+      [
+        SFXSetType.fire,
+        new SFX([
           'Fire Master-bounce-1.mp3',
           'Fire Master-bounce-2.mp3',
           'Fire Master-bounce-3.mp3',
           'Fire Master-bounce-4.mp3',
-      ])],
-      [SFXSetType.fireAlt, new SFX([
-        'FireAlt Master-bounce-1.mp3',
-        'FireAlt Master-bounce-2.mp3',
-        'FireAlt Master-bounce-3.mp3',
-        'FireAlt Master-bounce-4.mp3',
-      ])],
-      [SFXSetType.hit, new SFX([
-        'hit Master-bounce-1.mp3',
-        'hit Master-bounce-2.mp3',
-        'hit Master-bounce-3.mp3',
-        'hit Master-bounce-4.mp3',
-      ])],
-      [SFXSetType.explosion, new SFX([
+        ]),
+      ],
+      [
+        SFXSetType.fireAlt,
+        new SFX([
+          'FireAlt Master-bounce-1.mp3',
+          'FireAlt Master-bounce-2.mp3',
+          'FireAlt Master-bounce-3.mp3',
+          'FireAlt Master-bounce-4.mp3',
+        ]),
+      ],
+      [
+        SFXSetType.hit,
+        new SFX([
+          'hit Master-bounce-1.mp3',
+          'hit Master-bounce-2.mp3',
+          'hit Master-bounce-3.mp3',
+          'hit Master-bounce-4.mp3',
+        ]),
+      ],
+      [
+        SFXSetType.explosion,
+        new SFX([
           'explode Master-bounce-1.mp3',
           'explode Master-bounce-2.mp3',
           'explode Master-bounce-3.mp3',
           'explode Master-bounce-4.mp3',
-      ])],
+        ]),
+      ],
     ]);
   }
 }
@@ -155,7 +167,9 @@ export class SoundController {
   musicStarted: boolean = false;
   MAX_SFX_PLAYERS: number = 30;
 
-  constructor(musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null)) {
+  constructor(
+    musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null)
+  ) {
     this.sfxRegistry = new SFXRegistry();
     for (let i = 0; i < this.MAX_SFX_PLAYERS; i++) {
       this.sfxPlayers.value.push(new SFXPlayer(new SFX()));
@@ -189,7 +203,7 @@ export class SoundController {
         });
       });
     } else {
-      this._playMusic()
+      this._playMusic();
     }
   }
 
@@ -238,5 +252,4 @@ export class SoundController {
     // eslint-disable-next-line no-self-assign
     this.sfxPlayers.value = this.sfxPlayers.value;
   }
-
 }

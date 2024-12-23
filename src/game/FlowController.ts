@@ -125,19 +125,16 @@ export class FlowController {
     this.playerState._extraLifeBudget += score;
 
     if (this.playerState._upgradeScoreBudget >= UPGRADE_COST) {
-      const numUpgrades = Math.floor(
+      let numUpgrades = Math.floor(
         this.playerState._upgradeScoreBudget / UPGRADE_COST
       );
-      if (
-        this.playerState.weaponGrade.value + numUpgrades <
-        MAX_UPGRADE_INDEX
-      ) {
-        this.playerState.weaponGrade.value += numUpgrades;
-        this.playerState._upgradeScoreBudget -= UPGRADE_COST;
-        this.getPlayerActor()?.setWeaponGrade(
-          this.playerState.weaponGrade.value
-        );
-      }
+      numUpgrades = Math.min(
+        numUpgrades,
+        MAX_UPGRADE_INDEX - this.playerState.weaponGrade.value
+      );
+      this.playerState._upgradeScoreBudget -= UPGRADE_COST * numUpgrades;
+      this.playerState.weaponGrade.value += numUpgrades;
+      this.getPlayerActor()?.setWeaponGrade(this.playerState.weaponGrade.value);
     }
 
     if (this.playerState._extraLifeBudget >= EXTRA_LIFE_COST) {
@@ -145,7 +142,7 @@ export class FlowController {
         this.playerState._extraLifeBudget / EXTRA_LIFE_COST
       );
       this.playerState.lives.value += numExtraLives;
-      this.playerState._extraLifeBudget -= EXTRA_LIFE_COST;
+      this.playerState._extraLifeBudget -= EXTRA_LIFE_COST * numExtraLives;
     }
   }
 

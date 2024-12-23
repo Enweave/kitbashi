@@ -238,9 +238,9 @@ export class WeaponPlayer extends WeaponBase {
 
   playSound() {
     this.owner.flowController?.soundController?.playSFX(
-        SFXSetType.fireAlt,
-        audioBalanceFromScreenPosition(this.owner._body.pos.x),
-        1
+      SFXSetType.fireAlt,
+      audioBalanceFromScreenPosition(this.owner._body.pos.x),
+      1
     );
   }
 
@@ -269,7 +269,7 @@ export class WeaponPlayer extends WeaponBase {
         new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, -1)),
       ]),
       new LaunchSlot([
-        new LaunchParams(new Vector2(offsetX, 0), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX + 10, 0), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
