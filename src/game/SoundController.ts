@@ -3,7 +3,9 @@ import { clamp } from './Utils.ts';
 
 export enum SFXSetType {
   fire,
+  fireAlt,
   explosion,
+  hit,
 }
 
 class SFXFileList {
@@ -86,8 +88,30 @@ class SFXRegistry {
 
   constructor() {
     this.sfxMap = new Map([
-      [SFXSetType.fire, new SFX(['LASRGun_Particle Compressor Fire_01.wav'])],
-      [SFXSetType.explosion, new SFX(['EXPLDsgn_Implode_15.wav'])],
+      [SFXSetType.fire, new SFX([
+          'Fire Master-bounce-1.mp3',
+          'Fire Master-bounce-2.mp3',
+          'Fire Master-bounce-3.mp3',
+          'Fire Master-bounce-4.mp3',
+      ])],
+      [SFXSetType.fireAlt, new SFX([
+        'FireAlt Master-bounce-1.mp3',
+        'FireAlt Master-bounce-2.mp3',
+        'FireAlt Master-bounce-3.mp3',
+        'FireAlt Master-bounce-4.mp3',
+      ])],
+      [SFXSetType.hit, new SFX([
+        'hit Master-bounce-1.mp3',
+        'hit Master-bounce-2.mp3',
+        'hit Master-bounce-3.mp3',
+        'hit Master-bounce-4.mp3',
+      ])],
+      [SFXSetType.explosion, new SFX([
+          'explode Master-bounce-1.mp3',
+          'explode Master-bounce-2.mp3',
+          'explode Master-bounce-3.mp3',
+          'explode Master-bounce-4.mp3',
+      ])],
     ]);
   }
 }

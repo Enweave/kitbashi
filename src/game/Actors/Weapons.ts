@@ -236,6 +236,14 @@ export class WeaponPlayer extends WeaponBase {
   currentGrade: number = 1;
   maxGrade: number = 3;
 
+  playSound() {
+    this.owner.flowController?.soundController?.playSFX(
+        SFXSetType.fireAlt,
+        audioBalanceFromScreenPosition(this.owner._body.pos.x),
+        1
+    );
+  }
+
   constructor(owner: Actor) {
     super(owner);
     this.owner = owner;
