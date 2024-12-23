@@ -35,6 +35,10 @@ export class Player extends Actor {
     this.spawnPosition = Player.initialSpawnPosition;
   }
 
+  setWeaponGrade(grade: number) {
+    this.mainWeapon.currentLaunchSlot = grade;
+  }
+
   afterAttach() {
     this.flowController?.setPlayerActor(this);
   }

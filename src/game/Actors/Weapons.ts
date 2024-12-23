@@ -1,7 +1,7 @@
 import { FeatureBase } from './Base/Feature.ts';
 import {
   EnemyProjectile,
-  PlayerProjectile,
+  PlayerProjectile, PlayerProjectileMine,
   ProjectileBase,
 } from './Projectiles.ts';
 import { Actor } from './Base/ActorsBase.ts';
@@ -139,8 +139,8 @@ export class WeaponEnemyMine extends WeaponBase {
 }
 
 export class WeaponEnemyMinePlayerProjectile extends WeaponBase {
-  projectileClass = PlayerProjectile;
-  cooldownTime = 1;
+  projectileClass = PlayerProjectileMine;
+  cooldownTime = 100;
 
   constructor(owner: Actor) {
     super(owner);
@@ -248,13 +248,25 @@ export class WeaponPlayer extends WeaponBase {
         new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
       ]),
+      new LaunchSlot([
+        new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
+      ]),
+      new LaunchSlot([
+        new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
+        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, -1)),
+      ]),
+      new LaunchSlot([
+        new LaunchParams(new Vector2(offsetX, 0), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
+        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
+        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, -1)),
+      ]),
     ];
     this.currentLaunchSlot = 0;
-  }
-
-  upgrade() {
-    if (this.currentGrade < this.maxGrade) {
-      this.currentGrade++;
-    }
   }
 }

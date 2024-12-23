@@ -1,7 +1,7 @@
 import { Actor, EntityType } from './Base/ActorsBase.ts';
 import {
   ASPECT_RATIO,
-  DAMAGE_BASE,
+  DAMAGE_BASE, ENEMY_HP_MULTIPLIER, SCORE_BASE,
   SPEED_BASE,
   VIEWPORT_WIDTH,
 } from '../Constants.ts';
@@ -116,6 +116,8 @@ export class EnemyBase extends Actor {
     if (useSineWave) {
       this.movementPattern = new MovementPatternSineWave(2000, 1, -1);
     }
+
+    this.scoreCost = SCORE_BASE * this.maxHealth;
   }
 
   createBody(system: System, position: Vector2) {
@@ -165,18 +167,16 @@ export class EnemyBase extends Actor {
 }
 
 export class EnemyRam extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 4;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.ram;
   maxSpeed: number = SPEED_BASE * 0.5;
   sprite = new Sprite(['enemy-ram']);
-  scoreCost = 100;
 }
 
 export class EnemyShooter extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 2;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.shooter;
   maxSpeed: number = SPEED_BASE * 0.5;
   sprite = new Sprite(['enemy-shooter']);
   weapon: WeaponEnemyShooter;
-  scoreCost = 200;
 
   constructor(useSineWave: boolean = false) {
     super(useSineWave);
@@ -192,11 +192,10 @@ export class EnemyShooter extends EnemyBase {
 }
 
 export class EnemyBomber extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 8;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.bomber;
   maxSpeed: number = SPEED_BASE * 0.3;
   sprite = new Sprite(['enemy-bomber']);
   weapon: WeaponEnemyBomber;
-  scoreCost = 400;
 
   constructor(useSineWave: boolean = false) {
     super(useSineWave);
@@ -226,12 +225,11 @@ export class EnemyBomber extends EnemyBase {
 }
 
 export class EnemyMine extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 4;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.mine;
   maxSpeed: number = SPEED_BASE * 0.2;
   sprite = new Sprite(['enemy-mine']);
   weapon: WeaponEnemyMine;
   weaponsSecondary: WeaponEnemyMinePlayerProjectile;
-  scoreCost = 500;
   exploded: boolean = false;
 
   constructor(useSineWave: boolean = false) {
@@ -261,11 +259,10 @@ export class EnemyMine extends EnemyBase {
 }
 
 export class EnemySniper extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 2;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.sniper;
   maxSpeed: number = SPEED_BASE * 0.5;
   sprite = new Sprite(['enemy-sniper']);
   weapon: WeaponEnemySniper;
-  scoreCost = 200;
 
   SWITCH_PATTERN_X = VIEWPORT_WIDTH * 0.8;
 
@@ -298,13 +295,12 @@ export class EnemySniper extends EnemyBase {
 }
 
 export class EnemyBoss extends EnemyBase {
-  maxHealth = DAMAGE_BASE * 2;
+  maxHealth = DAMAGE_BASE * ENEMY_HP_MULTIPLIER.boss;
   maxSpeed: number = SPEED_BASE * 0.5;
   radius: number = 77;
   sprite = new Sprite(['boss']);
   weapon: WeaponBase;
   weapons: WeaponBase[] = [];
-  scoreCost = 200;
 
   canFire: boolean = true;
   waitTime: number = 2000;
