@@ -55,10 +55,10 @@ export class FlowController {
   );
   soundController: SoundController | null = null;
   sfxLevel = ref<number>(
-    JSON.parse(localStorage.getItem(StoreKeys.sfxLevel) || '0.5')
+    JSON.parse(localStorage.getItem(StoreKeys.sfxLevel) || '0.6')
   );
   musicLevel = ref<number>(
-    JSON.parse(localStorage.getItem(StoreKeys.musicLevel) || '0.5')
+    JSON.parse(localStorage.getItem(StoreKeys.musicLevel) || '0.3')
   );
 
   _spawnActorQueue: Actor[] = [];
@@ -116,6 +116,7 @@ export class FlowController {
     this.currentScreen.value = Screen.Game;
     this.playerState.reset();
     this._spawnActorQueue = [];
+    this.soundController?.playMusic();
   }
 
   addScore(score: number) {

@@ -12,8 +12,9 @@ import SFXPlayerComponent from './components/SoundComponents/SFXPlayerComponent.
 
 const containerRef = ref<HTMLElement | null>(null);
 const screenRef = ref<HTMLElement | null>(null);
+const musicRef = ref<HTMLAudioElement | null>(null);
 
-const soundController = new SoundController();
+const soundController = new SoundController(musicRef);
 const flowController = new FlowController(soundController);
 const inputController = new InputController(flowController);
 
@@ -75,6 +76,7 @@ onMounted(() => {
         v-if="flowController.currentScreen.value === Screen.EndGame"
       />
     </div>
+    <audio ref="musicRef" style="display: none"></audio>
     <s-f-x-player-component
       v-for="player in soundController.sfxPlayers.value"
       :sfx-player="player"

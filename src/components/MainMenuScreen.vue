@@ -23,5 +23,9 @@ onMounted(() => {
       title="SFX"
       v-model="flowController.sfxLevel"
     ></sound-level-slider>
+    <sound-level-slider
+        title="Music"
+        v-model="flowController.musicLevel"
+    ></sound-level-slider>
   </div>
 </template>

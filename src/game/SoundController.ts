@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue';
+import {Ref, ref} from 'vue';
 import { clamp } from './Utils.ts';
 
 export enum SFXSetType {
@@ -150,12 +150,44 @@ export class SoundController {
   musicLevel: number = 1;
 
   sfxPlayers: Ref<SFXPlayer[]> = ref([]);
-  MAX_SFX_PLAYERS: number = 16;
+  musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null);
+  musicBlobURL: string = '';
+  MAX_SFX_PLAYERS: number = 30;
 
-  constructor() {
+  constructor(musicPlayer: Ref<HTMLAudioElement | null, HTMLElement | null> = ref(null)) {
     this.sfxRegistry = new SFXRegistry();
     for (let i = 0; i < this.MAX_SFX_PLAYERS; i++) {
       this.sfxPlayers.value.push(new SFXPlayer(new SFX()));
+    }
+
+    this.musicPlayer = musicPlayer;
+    this.playMusic();
+  }
+
+  _playMusic() {
+    if (this.musicPlayer.value) {
+      this.musicPlayer.value.src = this.musicBlobURL;
+      this.musicPlayer.value.volume = this.musicLevel;
+      this.musicPlayer.value.loop = true;
+      this.musicPlayer.value.play();
+    }
+  }
+
+  playMusic() {
+    if (this.musicPlayer.value) {
+      fetch('./sound/music/backfire.mp3').then((response) => {
+        const type = response.headers.get('content-type');
+        if (!type) {
+          return;
+        }
+        response.arrayBuffer().then((buffer) => {
+          const blob = new Blob([buffer], { type: type });
+          this.musicBlobURL = URL.createObjectURL(blob);
+          this._playMusic();
+        });
+      });
+    } else {
+      this._playMusic()
     }
   }
 
@@ -165,6 +197,9 @@ export class SoundController {
 
   setMusicLevel(level: number) {
     this.musicLevel = level;
+    if (this.musicPlayer.value) {
+      this.musicPlayer.value.volume = this.musicLevel;
+    }
   }
 
   getSFXPlayer(): SFXPlayer | undefined {
@@ -201,4 +236,5 @@ export class SoundController {
     // eslint-disable-next-line no-self-assign
     this.sfxPlayers.value = this.sfxPlayers.value;
   }
+
 }
