@@ -14,6 +14,7 @@ import {
   WeaponEnemySniper,
 } from './Weapons.ts';
 import { FlowController } from '../FlowController.ts';
+import { Explosion } from './vfx.ts';
 
 abstract class MovementPattern {
   // implements movement patterns for enemies, like sine wave, straight line, etc.
@@ -135,6 +136,13 @@ export class EnemyBase extends Actor {
       );
     }
     this._markedForDeletion = true;
+
+    // spawn explosion
+    const explosion = new Explosion(
+      new Vector2(this._body.pos.x, this._body.pos.y),
+      new Vector2(0, 0)
+    );
+    this.flowController?._spawnActorQueue.push(explosion);
   }
 
   tick(delta: number) {

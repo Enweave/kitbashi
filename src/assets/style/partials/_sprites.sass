@@ -64,6 +64,39 @@
     background: url("/assets/sprites/boss/body0005.png") no-repeat
     background-size: contain
 
+
+@keyframes explosion
+  0%
+    background: url("/assets/sprites/explosion/sprite_2_0.png") no-repeat
+    background-size: contain
+  10%
+    background: url("/assets/sprites/explosion/sprite_2_1.png") no-repeat
+    background-size: contain
+  20%
+    background: url("/assets/sprites/explosion/sprite_2_2.png") no-repeat
+    background-size: contain
+  30%
+    background: url("/assets/sprites/explosion/sprite_2_3.png") no-repeat
+    background-size: contain
+  40%
+    background: url("/assets/sprites/explosion/sprite_2_4.png") no-repeat
+    background-size: contain
+  50%
+    background: url("/assets/sprites/explosion/sprite_2_5.png") no-repeat
+    background-size: contain
+  60%
+    background: url("/assets/sprites/explosion/sprite_2_6.png") no-repeat
+    background-size: contain
+  70%
+    background: url("/assets/sprites/explosion/sprite_2_7.png") no-repeat
+    background-size: contain
+  80%
+    background: url("/assets/sprites/explosion/sprite_2_8.png") no-repeat
+    background-size: contain
+  90%
+    background: url("/assets/sprites/explosion/sprite_2_9.png") no-repeat
+    background-size: contain
+
 $z_index_sprite: 10
 $z_index_sprite_projectile: 2
 
@@ -84,6 +117,17 @@ $z_index_sprite_projectile: 2
     background: variables.$color_b_light
     width: 60px
     height: 60px
+
+  &.explosion
+    z-index: $z_index_sprite + 1
+    &:before
+      width: 60px
+      height: 60px
+      background: none
+      background-size: contain
+      animation: explosion 1s steps(9)
+    &:after
+      background: none
 
   &.player
     &:before

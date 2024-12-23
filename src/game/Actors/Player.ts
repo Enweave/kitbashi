@@ -9,6 +9,7 @@ import {
 import { WeaponBase, WeaponPlayer } from './Weapons.ts';
 import { Sprite } from './Base/Sprite.ts';
 import { BodyOptions, System } from 'detect-collisions';
+import { Explosion } from './vfx.ts';
 
 export class Player extends Actor {
   input: InputController;
@@ -101,6 +102,12 @@ export class Player extends Actor {
   death(_: Actor | null = null) {
     super.death(_);
     this.sprite.htmlElement.classList.add('blink');
+    // spawn explosion
+    const explosion = new Explosion(
+      new Vector2(this._body.pos.x, this._body.pos.y),
+      new Vector2(0, 0)
+    );
+    this.flowController?._spawnActorQueue.push(explosion);
     this._isInvulnerable = true;
     this._body.pos.x = this.spawnPosition.x;
     this._body.pos.y = this.spawnPosition.y;
