@@ -93,6 +93,7 @@ onMounted(() => {
     <div class="sprite enemy-mine"></div>
     <div class="sprite enemy-bomber"></div>
     <div class="sprite explosion"></div>
+    <div class="viewport"></div>
   </div>
 </template>
 
