@@ -16,7 +16,6 @@ const props = defineProps<{
     >
       {{ inputController.lastErrorMessage }}
     </p>
-    <h2>Controls</h2>
     <div class="keybind-grid">
       <assignable-key-widget
         v-for="action in Object.values(InputActions)"
@@ -25,7 +24,7 @@ const props = defineProps<{
         :action="action"
       ></assignable-key-widget>
     </div>
-    <button @click="props.inputController.resetBindings">Reset bindings</button>
+    <button class="kitbashi-button" @click="props.inputController.resetBindings">Reset bindings</button>
   </div>
 </template>
 

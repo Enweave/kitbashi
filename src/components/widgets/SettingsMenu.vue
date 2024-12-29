@@ -7,7 +7,8 @@ import { ref } from 'vue';
 
 enum TabTypes {
   SOUND = 'Sound',
-  KEY_BINDINGS = 'Controls',
+  KEY_BINDINGS = 'Keyboard',
+  TOUCH = 'Touch/Mobile',
 }
 
 const currentTab = ref<TabTypes>(TabTypes.SOUND);
@@ -19,8 +20,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <div>
-    <button
+  <h2 style="text-align: center">Settings</h2>
+  <div class="tabz">
+    <button class="kitbashi-button" :class="{ active: currentTab == tab }"
       v-for="tab in Object.values(TabTypes)"
       :key="tab"
       @click="currentTab = tab as TabTypes"
@@ -46,6 +48,36 @@ const props = defineProps({
       :input-controller="props.inputController"
     ></key-bindings-menu>
   </div>
+  <div v-if="currentTab == TabTypes.TOUCH">
+    <p>Coming soon...</p>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="sass">
+@use "../../assets/style/partials/variables" as v
+.tabz
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  @media (max-width: v.$smol_screen_width)
+    grid-template-columns: 1fr
+
+button.kitbashi-button
+  background: transparent
+  color: v.$color_a_light
+  z-index: 1
+  &:before
+    content: ''
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    height: 1px
+    background-color: v.$color_b_dark
+    transition: height 0.3s
+    z-index: -1
+  &.active
+    &:after
+      width: 0
+    &:before
+      height: 100%
+</style>

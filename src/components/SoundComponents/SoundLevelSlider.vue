@@ -25,4 +25,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+  label {
+    min-width: 4em;
+  }
+</style>

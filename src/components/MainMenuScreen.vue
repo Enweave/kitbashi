@@ -21,7 +21,7 @@ onMounted(() => {
   <div class="menu-container" ref="menuRef">
     <div class="menu-head">
       <h1>Kitbashi!</h1>
-      <button @click="props.flowController.startGame()">Start Game</button>
+      <button class="kitbashi-button" @click="props.flowController.startGame()">Start Game</button>
     </div>
     <settings-menu
       :flow-controller="props.flowController"

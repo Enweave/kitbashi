@@ -1,6 +1,6 @@
 @use 'variables'
 
-button
+button.kitbashi-button
   text-transform: uppercase
   background-color: variables.$color_b_light
   color: variables.$color_a_dark
@@ -24,7 +24,7 @@ button
   &:active
     color: variables.$color_b_light
 
-  &:focus, &:focus-visible
+  &:focus-visible
     @include variables.focus-visible()
 
   &:disabled
