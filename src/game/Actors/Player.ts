@@ -43,8 +43,8 @@ export class Player extends Actor {
 
   adjustAccelerationForTouch(touchEnabled: boolean) {
     if (touchEnabled) {
-      this.acceleration = 0.01;
-      this.deceleration = 0.01;
+      this.acceleration = 0.009;
+      this.deceleration = 0.009;
     } else {
       this.acceleration = 0.002;
       this.deceleration = 0.008;
