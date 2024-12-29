@@ -16,31 +16,24 @@ onMounted(() => {
 
 <template>
   <div class="menu-container" ref="menuRef">
-    <div class="menu-head">
-      <template v-if="flowController.gameWon.value">
+    <template v-if="flowController.gameWon.value">
+      <div class="menu-head">
         <h1>VICTORY!</h1>
-        <button
-          class="kitbashi-button"
-          @click="props.flowController.mainMenu()"
-        >
-          Main menu
-        </button>
-      </template>
-      <template v-else>
+      </div>
+      <button class="kitbashi-button" @click="props.flowController.mainMenu()">
+        Main menu
+      </button>
+    </template>
+    <template v-else>
+      <div class="menu-head">
         <h1>Game over</h1>
-        <button
-          class="kitbashi-button"
-          @click="props.flowController.startGame()"
-        >
-          Retry!
-        </button>
-        <button
-          class="kitbashi-button"
-          @click="props.flowController.mainMenu()"
-        >
-          Main menu
-        </button>
-      </template>
-    </div>
+      </div>
+      <button class="kitbashi-button" @click="props.flowController.startGame()">
+        Retry!
+      </button>
+      <button class="kitbashi-button" @click="props.flowController.mainMenu()">
+        Main menu
+      </button>
+    </template>
   </div>
 </template>

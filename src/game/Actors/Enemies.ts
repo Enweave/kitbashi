@@ -305,8 +305,8 @@ export class EnemyBoss extends EnemyBase {
   weapons: WeaponBase[] = [];
 
   canFire: boolean = true;
-  waitTime: number = 2000;
-  fireTime: number = 4000;
+  waitTime: number = 1000;
+  fireTime: number = 2000;
   timer: Timer;
 
   SWITCH_PATTERN_X = VIEWPORT_WIDTH - this.radius * 1.1;
@@ -314,11 +314,15 @@ export class EnemyBoss extends EnemyBase {
   constructor(useSineWave: boolean = false) {
     super(useSineWave);
     const weaponMine = new WeaponEnemyMine(this);
-    weaponMine.cooldownTime = 500;
+    const weaponSniper = new WeaponEnemySniper(this);
+    const weaponMachineGun = new WeaponEnemyMachineGun(this);
+    weaponMine.cooldownTime = 150;
+    weaponSniper.cooldownTime = 150;
+    weaponMachineGun.cooldownTime = 50;
 
-    this.weapons.push(new WeaponEnemySniper(this));
+    this.weapons.push(weaponSniper);
     this.weapons.push(weaponMine);
-    this.weapons.push(new WeaponEnemyMachineGun(this));
+    this.weapons.push(weaponMachineGun);
 
     this.weapon = this.weapons[0];
 

@@ -41,6 +41,9 @@ export class Player extends Actor {
 
   afterAttach() {
     this.flowController?.setPlayerActor(this);
+    this.setWeaponGrade(
+      this.flowController?.playerState.weaponGrade.value || 0
+    );
   }
 
   createBody(system: System, position: Vector2) {

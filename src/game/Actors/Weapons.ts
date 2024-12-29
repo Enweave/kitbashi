@@ -207,7 +207,7 @@ export class WeaponEnemySniper extends WeaponBase {
 
 export class WeaponEnemyMachineGun extends WeaponBase {
   projectileClass = EnemyProjectile;
-  cooldownTime = 200;
+  cooldownTime = 100;
   spreadFactor = 0.3;
 
   getCurrentLaunchParams(): LaunchParams[] {
@@ -233,8 +233,6 @@ export class WeaponEnemyMachineGun extends WeaponBase {
 export class WeaponPlayer extends WeaponBase {
   projectileClass = PlayerProjectile;
   cooldownTime = 300;
-  currentGrade: number = 1;
-  maxGrade: number = 3;
 
   playSound() {
     this.owner.flowController?.soundController?.playSFX(
@@ -266,14 +264,14 @@ export class WeaponPlayer extends WeaponBase {
         new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
-        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, -1)),
+        new LaunchParams(new Vector2(offsetX, -20), new Vector2(1, -1)),
       ]),
       new LaunchSlot([
         new LaunchParams(new Vector2(offsetX + 10, 0), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, -10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 10), new Vector2(1, 0)),
         new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, 1)),
-        new LaunchParams(new Vector2(offsetX, 20), new Vector2(1, -1)),
+        new LaunchParams(new Vector2(offsetX, -20), new Vector2(1, -1)),
       ]),
     ];
     this.currentLaunchSlot = 0;
