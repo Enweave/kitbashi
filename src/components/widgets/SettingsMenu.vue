@@ -22,7 +22,9 @@ const props = defineProps({
 <template>
   <h2 style="text-align: center">Settings</h2>
   <div class="tabz">
-    <button class="kitbashi-button" :class="{ active: currentTab == tab }"
+    <button
+      class="kitbashi-button"
+      :class="{ active: currentTab == tab }"
       v-for="tab in Object.values(TabTypes)"
       :key="tab"
       @click="currentTab = tab as TabTypes"

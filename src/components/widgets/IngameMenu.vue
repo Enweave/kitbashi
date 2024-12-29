@@ -30,7 +30,12 @@ watch(props.flowController.paused, (paused) => {
     <div class="menu-container">
       <div class="menu-head">
         <h1>Pause</h1>
-        <button class="kitbashi-button" @click="props.flowController.mainMenu()">Main menu</button>
+        <button
+          class="kitbashi-button"
+          @click="props.flowController.mainMenu()"
+        >
+          Main menu
+        </button>
       </div>
       <settings-menu
         :flow-controller="props.flowController"

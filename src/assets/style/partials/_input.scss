@@ -77,7 +77,6 @@ $contrast: 100% !default;
     &::-ms-fill-upper {
       background: lighten($track-color, $contrast);
     }
-
   }
   &:focus-visible {
     @include variables.focus-visible();
