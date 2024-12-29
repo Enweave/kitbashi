@@ -64,6 +64,7 @@ onMounted(() => {
     <div id="screen" class="screen" ref="screenRef">
       <main-menu-screen
         :flowController="flowController"
+        :inputController="inputController"
         v-if="flowController.currentScreen.value === Screen.MainMenu"
       />
       <game-screen

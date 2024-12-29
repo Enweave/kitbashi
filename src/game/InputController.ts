@@ -1,7 +1,7 @@
 import { Ref, ref } from 'vue';
 import { FlowController } from './FlowController.ts';
 
-enum InputActions {
+export enum InputActions {
   left = 'left',
   right = 'right',
   up = 'up',
@@ -17,10 +17,40 @@ interface MovementDirection {
 
 export class InputController {
   actionState: Ref<Map<InputActions, boolean>> = ref(new Map());
+
+  newKeyBindListening: Ref<InputActions | null> = ref(null);
+  lastKeyCodePressed: Ref<string> = ref('');
+  lastErrorMessage: Ref<string> = ref('');
   private flowController: FlowController;
   private keyCodeMap: Map<string, InputActions> = new Map();
 
-  DEFAULT_BINDINGS = {
+  private initKeyCodeMap() {
+    for (const action of Object.values(InputActions)) {
+      this.keyCodeMap.set(this.getCodeFromStorageOrDefault(action), action);
+    }
+  }
+
+  private clearKeyCodesForAction(action: InputActions) {
+    for (const [key, value] of this.keyCodeMap) {
+      if (value === action) {
+        this.keyCodeMap.delete(key);
+      }
+    }
+  }
+
+  private getCodeFromStorageOrDefault(action: InputActions): string {
+    const storedKey = localStorage.getItem(action);
+    if (storedKey) {
+      return storedKey;
+    }
+    return this.DEFAULT_BINDINGS[action];
+  }
+  private setCodeToStorage(action: InputActions) {
+    const storedKey = this.getKeyCode(action);
+    localStorage.setItem(action, storedKey);
+  }
+
+  private DEFAULT_BINDINGS = {
     [InputActions.left]: 'KeyA',
     [InputActions.right]: 'KeyD',
     [InputActions.up]: 'KeyW',
@@ -30,7 +60,7 @@ export class InputController {
   };
 
   constructor(inFlowController: FlowController) {
-    this.resetBindings();
+    this.initKeyCodeMap();
 
     this.flowController = inFlowController;
 
@@ -45,6 +75,8 @@ export class InputController {
           this.flowController.togglePause();
         }
       }
+
+      this.lastKeyCodePressed.value = e.code;
     });
 
     window.addEventListener('keyup', (e) => {
@@ -68,19 +100,55 @@ export class InputController {
 
   resetBindings() {
     for (const [action, key] of Object.entries(this.DEFAULT_BINDINGS)) {
-      this.keyCodeMap.set(key, action as InputActions);
+      this.clearKeyCodesForAction(action as InputActions);
+      this.assignKey(action as InputActions, key);
     }
+
+    this.lastKeyCodePressed.value = '';
   }
 
   isFiring(): boolean {
     return this.actionState.value.get(InputActions.fire) || false;
   }
 
-  assignKey(action: InputActions, key: string) {
-    this.keyCodeMap.set(key, action);
+  getKeyCode(action: InputActions): string {
+    for (const [key, value] of this.keyCodeMap) {
+      if (value === action) {
+        return key;
+      }
+    }
+
+    return '<none>';
+  }
+
+  /* assigns a new keyCode to action and stores it in local storage
+   * returns a boolean if successful
+   * */
+  assignKey(action: InputActions, keyCode: string): boolean {
+    // check if the key is already assigned
+    if (this.keyCodeMap.has(keyCode)) {
+      this.lastErrorMessage.value = `"${keyCode}" is already assigned to "${this.keyCodeMap.get(keyCode)}"`;
+      return false;
+    }
+
+    this.clearKeyCodesForAction(action);
+    this.keyCodeMap.set(keyCode, action);
+    this.setCodeToStorage(action);
+    this.lastErrorMessage.value = '';
+    return true;
   }
 
   resetKey(action: InputActions) {
-    this.keyCodeMap.delete(this.DEFAULT_BINDINGS[action]);
+    this.clearKeyCodesForAction(action);
+    this.keyCodeMap.set(this.DEFAULT_BINDINGS[action], action);
+    this.setCodeToStorage(action);
+  }
+
+  armNewKeyBindListening(value: InputActions) {
+    this.newKeyBindListening.value = value;
+  }
+
+  disarmNewKeyBindListening() {
+    this.newKeyBindListening.value = null;
   }
 }

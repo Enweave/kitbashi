@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { defineProps } from 'vue';
 import { FlowController } from '../game/FlowController.ts';
-import IngameMenu from './IngameMenu.vue';
+import IngameMenu from './widgets/IngameMenu.vue';
 import { MainLoop } from '../game/MainLoop.ts';
 import { InputController } from '../game/InputController.ts';
 import { Scene } from '../game/SceneController.ts';
@@ -71,5 +71,8 @@ onUnmounted(() => {
     ></canvas>
   </div>
 
-  <ingame-menu :flowController="props.flowController"></ingame-menu>
+  <ingame-menu
+    :flowController="props.flowController"
+    :inputController="props.inputController"
+  ></ingame-menu>
 </template>

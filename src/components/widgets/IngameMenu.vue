@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { defineProps } from 'vue';
-import { FlowController } from '../game/FlowController.ts';
-import SoundLevelSlider from './SoundComponents/SoundLevelSlider.vue';
+import { FlowController } from '../../game/FlowController.ts';
+import SoundLevelSlider from '../SoundComponents/SoundLevelSlider.vue';
+import KeyBindingsMenu from './KeyBindingsMenu.vue';
+import { InputController } from '../../game/InputController.ts';
 
 const props = defineProps<{
   flowController: FlowController;
+  inputController: InputController;
 }>();
 const menuRef = ref<HTMLElement | null>(null);
 const menuClass = computed(() => {
@@ -36,6 +39,9 @@ watch(props.flowController.paused, (paused) => {
         title="Music"
         v-model="flowController.musicLevel"
       ></sound-level-slider>
+      <key-bindings-menu
+        :input-controller="props.inputController"
+      ></key-bindings-menu>
     </div>
   </div>
 </template>

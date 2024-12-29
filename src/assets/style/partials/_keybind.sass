@@ -1,0 +1,17 @@
+@use "variables"
+
+.keybind-menu
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: variables.$gutter
+
+.keybind-grid
+  display: grid
+  grid-template-columns: repeat(4, 1fr)
+  gap: variables.$gutter
+  justify-content: center
+  align-items: center
+  margin-bottom: variables.$gutter
+  label
+    text-transform: capitalize

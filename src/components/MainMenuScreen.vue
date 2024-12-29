@@ -3,11 +3,14 @@ import { onMounted, ref } from 'vue';
 import { defineProps } from 'vue';
 import { FlowController } from '../game/FlowController.ts';
 import SoundLevelSlider from './SoundComponents/SoundLevelSlider.vue';
+import KeyBindingsMenu from './widgets/KeyBindingsMenu.vue';
+import { InputController } from '../game/InputController.ts';
 
 const menuRef = ref<HTMLElement | null>(null);
 
 const props = defineProps<{
   flowController: FlowController;
+  inputController: InputController;
 }>();
 
 onMounted(() => {
@@ -27,5 +30,8 @@ onMounted(() => {
       title="Music"
       v-model="flowController.musicLevel"
     ></sound-level-slider>
+    <key-bindings-menu
+      :input-controller="props.inputController"
+    ></key-bindings-menu>
   </div>
 </template>
