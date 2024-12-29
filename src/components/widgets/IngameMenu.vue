@@ -2,9 +2,8 @@
 import { computed, ref, watch } from 'vue';
 import { defineProps } from 'vue';
 import { FlowController } from '../../game/FlowController.ts';
-import SoundLevelSlider from '../SoundComponents/SoundLevelSlider.vue';
-import KeyBindingsMenu from './KeyBindingsMenu.vue';
 import { InputController } from '../../game/InputController.ts';
+import SettingsMenu from './SettingsMenu.vue';
 
 const props = defineProps<{
   flowController: FlowController;
@@ -29,19 +28,15 @@ watch(props.flowController.paused, (paused) => {
 <template>
   <div :class="menuClass" ref="menuRef">
     <div class="menu-container">
-      <h1>Pause</h1>
-      <button @click="props.flowController.mainMenu()">Main menu</button>
-      <sound-level-slider
-        title="SFX"
-        v-model="flowController.sfxLevel"
-      ></sound-level-slider>
-      <sound-level-slider
-        title="Music"
-        v-model="flowController.musicLevel"
-      ></sound-level-slider>
-      <key-bindings-menu
+      <div class="menu-head">
+        <h1>Pause</h1>
+        <button @click="props.flowController.mainMenu()">Main menu</button>
+      </div>
+      <settings-menu
+        :flow-controller="props.flowController"
         :input-controller="props.inputController"
-      ></key-bindings-menu>
+      >
+      </settings-menu>
     </div>
   </div>
 </template>

@@ -47,18 +47,10 @@ const onCancel = () => {
 <template>
   <label>{{ action }}</label>
   <label>{{ currentKeyCode }}</label>
-  <button v-show="!listening" @click="onAssignKey">
-    Assign
-  </button>
-  <button v-show="!listening" @click="onResetKey">
-    Reset
-  </button>
-  <label v-show="listening">
-    Press a key to assign
-  </label>
-  <button v-show="listening" @click="onCancel">
-    Cancel
-  </button>
+  <button v-show="!listening" @click="onAssignKey">Assign</button>
+  <button v-show="!listening" @click="onResetKey">Reset</button>
+  <label v-show="listening"> Press a key to assign </label>
+  <button v-show="listening" @click="onCancel">Cancel</button>
 </template>
 
 <style scoped></style>

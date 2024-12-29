@@ -6,6 +6,7 @@
   align-items: center
   gap: variables.$gutter
 
+
 .keybind-grid
   display: grid
   grid-template-columns: repeat(4, 1fr)
@@ -15,3 +16,8 @@
   margin-bottom: variables.$gutter
   label
     text-transform: capitalize
+
+  @media (max-width: variables.$smol_screen_width)
+    grid-template-columns: repeat(2, 1fr)
+    grid-auto-rows: 1fr 2.5fr
+    align-items: start

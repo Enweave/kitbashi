@@ -9,8 +9,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="keybind-menu">
-    <p v-if="inputController.lastErrorMessage.value.length > 0" class="error">
+  <div class="keybind-menu" v-if="props.inputController">
+    <p
+      v-if="props.inputController.lastErrorMessage.value.length > 0"
+      class="error"
+    >
       {{ inputController.lastErrorMessage }}
     </p>
     <h2>Controls</h2>
@@ -22,7 +25,7 @@ const props = defineProps<{
         :action="action"
       ></assignable-key-widget>
     </div>
-    <button @click="inputController.resetBindings">Reset bindings</button>
+    <button @click="props.inputController.resetBindings">Reset bindings</button>
   </div>
 </template>
 

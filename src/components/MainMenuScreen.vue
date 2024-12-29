@@ -2,9 +2,8 @@
 import { onMounted, ref } from 'vue';
 import { defineProps } from 'vue';
 import { FlowController } from '../game/FlowController.ts';
-import SoundLevelSlider from './SoundComponents/SoundLevelSlider.vue';
-import KeyBindingsMenu from './widgets/KeyBindingsMenu.vue';
 import { InputController } from '../game/InputController.ts';
+import SettingsMenu from './widgets/SettingsMenu.vue';
 
 const menuRef = ref<HTMLElement | null>(null);
 
@@ -20,18 +19,14 @@ onMounted(() => {
 
 <template>
   <div class="menu-container" ref="menuRef">
-    <h1>Kitbashi!</h1>
-    <button @click="props.flowController.startGame()">Start Game</button>
-    <sound-level-slider
-      title="SFX"
-      v-model="flowController.sfxLevel"
-    ></sound-level-slider>
-    <sound-level-slider
-      title="Music"
-      v-model="flowController.musicLevel"
-    ></sound-level-slider>
-    <key-bindings-menu
+    <div class="menu-head">
+      <h1>Kitbashi!</h1>
+      <button @click="props.flowController.startGame()">Start Game</button>
+    </div>
+    <settings-menu
+      :flow-controller="props.flowController"
       :input-controller="props.inputController"
-    ></key-bindings-menu>
+    >
+    </settings-menu>
   </div>
 </template>
