@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "detect-collisions": "^9.24.0",
+    "on-screen-controllers": "^1.0.6",
     "sass": "^1.83.0",
     "vue": "^3.5.13"
   },

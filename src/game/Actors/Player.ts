@@ -10,6 +10,7 @@ import { WeaponBase, WeaponPlayer } from './Weapons.ts';
 import { Sprite } from './Base/Sprite.ts';
 import { BodyOptions, System } from 'detect-collisions';
 import { Explosion } from './vfx.ts';
+import { watch } from 'vue';
 
 export class Player extends Actor {
   input: InputController;
@@ -33,6 +34,21 @@ export class Player extends Actor {
     this.mainWeapon = new WeaponPlayer(this);
     this.mainWeapon.postInit();
     this.spawnPosition = Player.initialSpawnPosition;
+    this.adjustAccelerationForTouch(this.input.screenGamepad.enabled.value);
+
+    watch(this.input.screenGamepad.enabled, (value) => {
+      this.adjustAccelerationForTouch(value);
+    });
+  }
+
+  adjustAccelerationForTouch(touchEnabled: boolean) {
+    if (touchEnabled) {
+      this.acceleration = 0.01;
+      this.deceleration = 0.01;
+    } else {
+      this.acceleration = 0.002;
+      this.deceleration = 0.008;
+    }
   }
 
   setWeaponGrade(grade: number) {

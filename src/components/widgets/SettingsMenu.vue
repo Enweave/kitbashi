@@ -6,24 +6,47 @@ import SoundLevelSlider from '../SoundComponents/SoundLevelSlider.vue';
 import { ref } from 'vue';
 
 enum TabTypes {
+  TOUCH = 'Touch/Mobile',
   SOUND = 'Sound',
   KEY_BINDINGS = 'Keyboard',
-  TOUCH = 'Touch/Mobile',
 }
 
-const currentTab = ref<TabTypes>(TabTypes.SOUND);
+const currentTab = ref<TabTypes>(TabTypes.TOUCH);
 
 const props = defineProps({
   flowController: FlowController,
   inputController: InputController,
 });
-</script>
 
+const isFullscreen = ref<boolean>(false);
+
+const fullscreenToggle = () => {
+  if (document.fullscreenElement) {
+    document
+      .exitFullscreen()
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(() => {
+        isFullscreen.value = false;
+      });
+  } else {
+    document.documentElement
+      .requestFullscreen()
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(() => {
+        isFullscreen.value = false;
+      });
+  }
+};
+</script>
 <template>
   <h2 style="text-align: center">Settings</h2>
   <div class="tabz">
     <button
-      class="kitbashi-button"
+      class="kitbashi-button tab"
       :class="{ active: currentTab == tab }"
       v-for="tab in Object.values(TabTypes)"
       :key="tab"
@@ -51,7 +74,58 @@ const props = defineProps({
     ></key-bindings-menu>
   </div>
   <div v-if="currentTab == TabTypes.TOUCH">
-    <p>Coming soon...</p>
+    <div class="touch-settings">
+      <label>On-screen controls</label>
+      <button
+        class="kitbashi-button"
+        @click="props.inputController?.screenGamepad.toggleEnabled"
+      >
+        <span v-if="props.inputController?.screenGamepad.enabled.value"
+          >Disable</span
+        >
+        <span v-else>Enable</span>
+      </button>
+      <label>Vertical adjustment</label>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.1"
+        :value="props.inputController?.screenGamepad.offsetTop.value"
+        @input="
+          (e: Event) => {
+            props.inputController?.screenGamepad.setOffsetTop(e.target);
+          }
+        "
+      />
+      <label>Horizontal adjustment</label>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.1"
+        :value="props.inputController?.screenGamepad.separation.value"
+        @input="
+          (e: Event) => {
+            props.inputController?.screenGamepad.setSeparation(e.target);
+          }
+        "
+      />
+      <label>Invert</label>
+      <button
+        class="kitbashi-button"
+        @click="props.inputController?.screenGamepad.toggleReversed"
+      >
+        <span v-if="props.inputController?.screenGamepad.reversed.value"
+          >Disable</span
+        >
+        <span v-else>Enable</span>
+      </button>
+      <label>Fullscreen</label>
+      <button class="kitbashi-button" @click="fullscreenToggle">
+        <span v-if="isFullscreen">Disable</span><span v-else>Enable</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -62,8 +136,15 @@ const props = defineProps({
   grid-template-columns: repeat(3, 1fr)
   @media (max-width: v.$smol_screen_width)
     grid-template-columns: 1fr
+  @container (width < #{v.$smol_screen_width})
+    grid-template-columns: 1fr
+.touch-settings
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  gap: v.$gutter
+  align-items: baseline
 
-button.kitbashi-button
+button.kitbashi-button.tab
   background: transparent
   color: v.$color_a_light
   z-index: 1

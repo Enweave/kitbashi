@@ -20,6 +20,8 @@ $shake_roll_strength: 0.5deg
     transform: translate(0, 0) rotate(0)
 
 html, body
+  --onscreen-horizontal-adjustment: 50%
+  --onscreen-vertical-adjustment: 50%
   touch-action: none
   background-color: variables.$color_a_dark
   color: variables.$color_a_light
@@ -28,16 +30,58 @@ html, body
   background-color: variables.$color_a_light
   color: variables.$color_a_dark
 
-.container
-  overflow: clip
+
+.wrapper
+  display: grid
+  grid-template-areas: 'sidel container sider'
+  grid-template-columns: 1fr 1fr 1fr
   height: 100vh
   height: 100dvh
-  max-width: 1000px
-  width: 100%
-  margin: 0 auto
+  overflow: clip
+  &.normal
+    .screen-gamepad-joystick
+      left: var(--onscreen-horizontal-adjustment)
+    .screen-gamepad-buttons, .onscreen-menu-button
+      right: var(--onscreen-horizontal-adjustment)
+  &.reversed
+    .screen-gamepad-joystick
+      right: var(--onscreen-horizontal-adjustment)
+    .screen-gamepad-buttons, .onscreen-menu-button
+      left: var(--onscreen-horizontal-adjustment)
+    grid-template-areas: 'sider container sidel'
+
+.container
+  height: 100dvh
   display: grid
   align-items: center
   justify-content: center
+  grid-area: container
+
+.side
+  position: relative
+  z-index: 1
+
+.side-l
+  grid-area: sidel
+
+.side-r
+  grid-area: sider
+
+.screen-gamepad-joystick, .screen-gamepad-buttons
+  position: absolute
+  top: var(--onscreen-vertical-adjustment)
+
+.onscreen-menu-button
+  position: absolute
+  top: 2 * variables.$gutter
+  button.kitbashi-button
+    position: absolute
+    left: -50%
+    transform: translateX(-50%)
+    img
+      width: 2 * variables.$gutter
+      height: 2 * variables.$gutter
+      max-width: 2 * variables.$gutter
 
 .screen
   background-color: variables.$color_a_dark
@@ -77,9 +121,3 @@ html, body
     transform: translate(-50%, 0)
   @container (height < 40em)
     background: variables.$color_a_dark
-
-.row
-  display: flex
-  flex-wrap: wrap
-  gap: variables.$gutter
-  margin-bottom: variables.$gutter
