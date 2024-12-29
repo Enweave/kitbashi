@@ -7,7 +7,6 @@ enum InputActions {
   up = 'up',
   down = 'down',
   fire = 'fire',
-  special = 'special',
   pause = 'pause',
 }
 
@@ -21,14 +20,17 @@ export class InputController {
   private flowController: FlowController;
   private keyCodeMap: Map<string, InputActions> = new Map();
 
+  DEFAULT_BINDINGS = {
+    [InputActions.left]: 'KeyA',
+    [InputActions.right]: 'KeyD',
+    [InputActions.up]: 'KeyW',
+    [InputActions.down]: 'KeyS',
+    [InputActions.fire]: 'KeyJ',
+    [InputActions.pause]: 'Escape',
+  };
+
   constructor(inFlowController: FlowController) {
-    this.keyCodeMap.set('KeyA', InputActions.left);
-    this.keyCodeMap.set('KeyD', InputActions.right);
-    this.keyCodeMap.set('KeyW', InputActions.up);
-    this.keyCodeMap.set('KeyS', InputActions.down);
-    this.keyCodeMap.set('KeyJ', InputActions.fire);
-    this.keyCodeMap.set('KeyK', InputActions.special);
-    this.keyCodeMap.set('Escape', InputActions.pause);
+    this.resetBindings();
 
     this.flowController = inFlowController;
 
@@ -64,11 +66,21 @@ export class InputController {
     return direction;
   }
 
+  resetBindings() {
+    for (const [action, key] of Object.entries(this.DEFAULT_BINDINGS)) {
+      this.keyCodeMap.set(key, action as InputActions);
+    }
+  }
+
   isFiring(): boolean {
     return this.actionState.value.get(InputActions.fire) || false;
   }
 
-  isSpecial(): boolean {
-    return this.actionState.value.get(InputActions.special) || false;
+  assignKey(action: InputActions, key: string) {
+    this.keyCodeMap.set(key, action);
+  }
+
+  resetKey(action: InputActions) {
+    this.keyCodeMap.delete(this.DEFAULT_BINDINGS[action]);
   }
 }
