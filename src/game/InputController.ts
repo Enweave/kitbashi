@@ -35,6 +35,9 @@ const OFFSET_TOP_STORAGE_KEY = 'screenGamepadOffsetTop';
 const SEPARATION_STORAGE_KEY = 'screenGamepadSeparation';
 const REVERSED_STORAGE_KEY = 'screenGamepadReversed';
 const ENABLED_STORAGE_KEY = 'screenGamepadEnabled';
+const DPAD_RADIUS: number = 120;
+const BUTTON_RADIUS: number = 50;
+
 
 export class ScreenGamepad {
   offsetTop: Ref<number>;
@@ -91,6 +94,15 @@ export class ScreenGamepad {
 
   updateOffsets() {
     document.body.style.setProperty(
+        '--onscreen-dpad-radius',
+        `${DPAD_RADIUS/2}px`
+    );
+    document.body.style.setProperty(
+        '--onscreen-button-radius',
+        `${BUTTON_RADIUS}px`
+    );
+
+    document.body.style.setProperty(
       '--onscreen-vertical-adjustment',
       `${this.offsetTop.value * 100}%`
     );
@@ -116,7 +128,7 @@ export class ScreenGamepad {
       left: '0%',
       color: '#9E1E00',
       thumbColor: '#f0f0f0',
-      radius: 120,
+      radius: DPAD_RADIUS,
       rotation: 0,
       onInputCallback: (x, y) => {
         this.inputController?.updateDirectionFromGamepad(x, -y);
@@ -175,7 +187,7 @@ export class ScreenGamepad {
       top: '0%',
       left: '0%',
       color: '#9E1E00',
-      radius: 50,
+      radius: BUTTON_RADIUS,
       onPressCallback: () => {
         this.inputController?.setIsFiring(true);
       },

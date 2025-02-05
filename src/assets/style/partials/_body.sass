@@ -22,6 +22,8 @@ $shake_roll_strength: 0.5deg
 html, body
   --onscreen-horizontal-adjustment: 50%
   --onscreen-vertical-adjustment: 50%
+  --onscreen-dpad-radius: 120px
+  --onscreen-button-radius: 50px
   touch-action: none
   background-color: variables.$color_a_dark
   color: variables.$color_a_light
@@ -40,14 +42,23 @@ html, body
   overflow: clip
   &.normal
     .screen-gamepad-joystick
-      left: var(--onscreen-horizontal-adjustment)
-    .screen-gamepad-buttons, .onscreen-menu-button
+      left: calc(var(--onscreen-horizontal-adjustment) + var(--onscreen-dpad-radius) + #{variables.$gutter})
+    .screen-gamepad-buttons
+      right: calc(var(--onscreen-horizontal-adjustment) + var(--onscreen-button-radius) + #{variables.$gutter})
+    .onscreen-menu-button
       right: var(--onscreen-horizontal-adjustment)
+      .kitbashi-button
+        transform: translateX(calc(-100% - #{variables.$gutter}))
+
   &.reversed
     .screen-gamepad-joystick
-      right: var(--onscreen-horizontal-adjustment)
-    .screen-gamepad-buttons, .onscreen-menu-button
+      right: calc(var(--onscreen-horizontal-adjustment) + var(--onscreen-dpad-radius) + #{variables.$gutter})
+    .screen-gamepad-buttons
+      left: calc(var(--onscreen-horizontal-adjustment) + var(--onscreen-button-radius) + #{variables.$gutter})
+    .onscreen-menu-button
       left: var(--onscreen-horizontal-adjustment)
+      .kitbashi-button
+        transform: translateX(#{variables.$gutter})
     grid-template-areas: 'sider container sidel'
 
 .container
@@ -76,8 +87,6 @@ html, body
   top: 2 * variables.$gutter
   button.kitbashi-button
     position: absolute
-    left: -50%
-    transform: translateX(-50%)
     img
       width: 2 * variables.$gutter
       height: 2 * variables.$gutter
