@@ -15,23 +15,38 @@ export const enum Screen {
   EndGame,
 }
 
+const HI_SCORE_STORAGE_KEY = "hi_score"
+
 export class PlayerState {
   playerActor: Player | null = null;
   score = ref<number>(0);
+  highScore = ref<number>(0);
   lives = ref<number>(3);
   weaponGrade = ref<number>(0);
+  newRecord = ref<boolean>(false);
 
   _upgradeScoreBudget = 0;
   _extraLifeBudget = 0;
 
   reset() {
     this.score.value = 0;
+    this.highScore.value = parseFloat(localStorage.getItem(HI_SCORE_STORAGE_KEY) || '0')
     this.lives.value = 3;
     this.weaponGrade.value = 0;
     this.playerActor = null;
     this._upgradeScoreBudget = 0;
     this._extraLifeBudget = 0;
+    this.newRecord.value = false;
   }
+
+  updateHiScore() {
+    if (this.highScore.value < this.score.value) {
+      this.newRecord.value = true;
+      this.highScore.value = this.score.value;
+      localStorage.setItem(HI_SCORE_STORAGE_KEY, this.highScore.value.toString());
+    }
+  }
+
 }
 
 enum StoreKeys {
@@ -159,6 +174,7 @@ export class FlowController {
   }
 
   winGame() {
+    this.playerState.updateHiScore();
     this.paused.value = true;
     this.gameWon.value = true;
     this.currentScreen.value = Screen.EndGame;

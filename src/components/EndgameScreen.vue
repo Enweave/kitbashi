@@ -19,6 +19,8 @@ onMounted(() => {
     <template v-if="flowController.gameWon.value">
       <div class="menu-head">
         <h1>VICTORY!</h1>
+        <h2>TOTAL SCORE: {{ flowController.playerState.score }}</h2>
+        <h2>HIGHEST SCORE: {{ flowController.playerState.highScore }} <span v-if="flowController.playerState.newRecord.value">(new record)</span></h2>
       </div>
       <button class="kitbashi-button" @click="props.flowController.mainMenu()">
         Main menu
